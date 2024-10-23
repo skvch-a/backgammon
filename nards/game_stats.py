@@ -1,7 +1,7 @@
 import json
 from os import path, makedirs
-from SmartBot import SmartBot
-from StupidBot import StupidBot
+from nards.bots.smart_bot import SmartBot
+from nards.bots.stupid_bot import StupidBot
 from nards.constants import BLACK
 
 
@@ -29,11 +29,11 @@ class GameState:
         if not path.exists('jsons'):
             makedirs('jsons')
 
-        with open('jsons/game_state.json', 'w') as f:
+        with open('game_state.json', 'w') as f:
             json.dump(game_state, f)
 
     def load(self):
-        with (open('jsons/game_state.json', 'r') as f):
+        with (open('game_state.json', 'r') as f):
             game_state = json.load(f)
             self.bot = self.dictionary_of_bots[game_state['bot']]
             self.columns = game_state['columns']

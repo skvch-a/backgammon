@@ -1,14 +1,14 @@
 from field import *
 import pygame
 import controls
-from drawingField import DrawingField
+from drawing_field import DrawingField
 import random
 from os import walk
 from game_stats import GameState
 from os import path, makedirs
 from color_saves import ColorsSaver
-from SmartBot import SmartBot
-from StupidBot import StupidBot
+from nards.bots.smart_bot import SmartBot
+from nards.bots.stupid_bot import StupidBot
 
 
 class Game:
@@ -110,7 +110,7 @@ class Game:
 
     def run(self):
         self.menu()
-        bg_color = (255, 255, 255)
+
         if self.is_new_game:
             self.game_state = self.load_fresh_game()
         else:
@@ -123,7 +123,7 @@ class Game:
                 self.throw_bones()
                 self.current_color = (self.current_color + 1) % 2
                 controls.update(
-                    bg_color, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color
+                    BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color
                 )
                 self.draw_text()
                 pygame.time.wait(16)
@@ -154,14 +154,14 @@ class Game:
                 self.current_color = (self.current_color + 1) % 2
 
             controls.update(
-                bg_color, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color
+                BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color
             )
             self.draw_text()
             pygame.time.wait(16)
             pygame.display.update()
 
         while True:
-            controls.update(bg_color, self.screen, self.drawing_field,
+            controls.update(BG_COLOR, self.screen, self.drawing_field,
                             self.dices, self.secret_flag, self.current_color)
 
             winner = ''
@@ -358,8 +358,8 @@ class Game:
         game_state = GameState()
         if not path.exists('jsons'):
             makedirs('jsons')
-        if not path.isfile('jsons/game_state.json'):
-            with open('jsons/game_state.json', 'w'):
+        if not path.isfile('game_state.json'):
+            with open('game_state.json', 'w'):
                 pass
             game_state = self.load_fresh_game()
             game_state.save()
