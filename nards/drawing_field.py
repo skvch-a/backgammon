@@ -6,7 +6,7 @@ from constants import *
 
 
 class DrawingField:
-    def __init__(self, field, x_coord, y_coord):
+    def __init__(self, field):
         self.field = field
         self.white_sprite = pygame.image.load("assets/images/Checker-white.png")
         self.black_sprite = pygame.image.load("assets/images/Checker-neger.png")
@@ -16,8 +16,8 @@ class DrawingField:
             self.dice_sprites[i] = pygame.transform.scale(sprite, (50, 50))
         self.screen = pygame.display.set_mode((900, 600))
         self.image = pygame.image.load("assets/images/field.png")
-        self.x_coord = x_coord
-        self.y_coord = y_coord
+        self.x_coord = 50
+        self.y_coord = 30
         self.positions = []
         self.position_down = []
         self.fill_positions()
@@ -28,8 +28,8 @@ class DrawingField:
         for pos_down in self.position_down:
             self.pikes.append(Pike(pos_down[0], pos_down[1], -190, 27))
 
-        black_house_pos = (x_coord - 20, y_coord)
-        white_house_pos = (x_coord + self.image.get_width() + 20, y_coord)
+        black_house_pos = (self.x_coord - 20, self.y_coord)
+        white_house_pos = (self.x_coord + self.image.get_width() + 20, self.y_coord)
         self.houses_pikes[WHITE] = Pike(white_house_pos[0], white_house_pos[1], 190, 27)
         self.houses_pikes[WHITE].color = (255, 192, 203)
         self.houses_pikes[BLACK] = Pike(black_house_pos[0], black_house_pos[1], 190, 27)

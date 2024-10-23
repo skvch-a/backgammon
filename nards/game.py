@@ -29,7 +29,7 @@ class Game:
 
         pygame.font.init()
         self.screen = pygame.display.set_mode((900, 600))
-        self.drawing_field = DrawingField(self.field, 50, 30)
+        self.drawing_field = DrawingField(self.field)
         pygame.display.set_caption("Зелёный слоник")
         self.font = pygame.font.SysFont("Comic Sans", 18)
 
@@ -68,16 +68,14 @@ class Game:
             button_continue_image, button_continue_rect.size
         )
 
-        # write_photo_to('cam.png') # без негатива =)
-        # weak = pygame.image.load("cam.png")
-        # weak = pygame.transform.scale(lox, (MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT - 45))
+
         while True:
             self.screen.fill((255, 255, 255))
             self.screen.blit(button_pvp_image, button_pvp_rect)
             self.screen.blit(button_pve_stupid_image, button_pve_stupid_rect)
             self.screen.blit(button_pve_smart_image, button_pve_smart_rect)
             self.screen.blit(button_continue_image, button_continue_rect)
-            # self.screen.blit(weak, (button_PvE_stupid_rect.x, button_PvE_stupid_rect.y + 45))
+
             pygame.time.wait(16)
             events = pygame.event.get()
             for event in events:
@@ -213,7 +211,7 @@ class Game:
         pygame.init()
         pygame.font.init()
         pygame.display.set_caption("Зелёный слоник")
-        self.drawing_field = DrawingField(self.field, 50, 30)
+        self.drawing_field = DrawingField(self.field)
 
     def throw_bones(self):
         self.dices = [random.randint(1, 6), random.randint(1, 6)]

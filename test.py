@@ -54,7 +54,7 @@ class NerdsTests(unittest.TestCase):
         x = 111
         y = 124
 
-        field = DrawingField(self.field_only_black, 50, 30)
+        field = DrawingField(self.field_only_black)
         self.assertTrue(field.pikes[11].is_inside(x, y))
 
     def test_is_there_legal_move(self):
