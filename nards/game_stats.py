@@ -29,11 +29,11 @@ class GameState:
         if not path.exists('jsons'):
             makedirs('jsons')
 
-        with open('game_state.json', 'w') as f:
-            json.dump(game_state, f)
+        with open('jsons/game_state.json', 'w') as file:
+            json.dump(game_state, file, indent=4)
 
     def load(self):
-        with (open('game_state.json', 'r') as f):
+        with (open('jsons/game_state.json', 'r') as f):
             game_state = json.load(f)
             self.bot = self.dictionary_of_bots[game_state['bot']]
             self.columns = game_state['columns']

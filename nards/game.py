@@ -79,17 +79,6 @@ class Game:
             pygame.time.wait(16)
             events = pygame.event.get()
             for event in events:
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_r:
-                        self.number_of_music = (self.number_of_music + 1) % len(self.music)
-                        pygame.mixer.music.load("assets/music/" + self.music[self.number_of_music])
-                        pygame.mixer.music.play(-1)
-                        if "music/" + self.music[self.number_of_music] == "rmusic/bh.mp3":
-                            self.secret_flag = True
-                        else:
-                            self.secret_flag = False
-                    if event.key == pygame.K_s:
-                        pygame.mixer.music.pause()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
                     if button_pvp_rect.collidepoint(mouse_pos):
@@ -179,16 +168,6 @@ class Game:
                 if event.key == pygame.K_ESCAPE:
                     self.save_info_in_game_stats()
                     self.pause()
-                if event.key == pygame.K_r:
-                    self.number_of_music = (self.number_of_music + 1) % len(self.music)
-                    pygame.mixer.music.load("assets/music/" + self.music[self.number_of_music])
-                    pygame.mixer.music.play(-1)
-                    if "music/" + self.music[self.number_of_music] == "music/bh.mp3":
-                        self.secret_flag = True
-                    else:
-                        self.secret_flag = False
-                if event.key == pygame.K_s:
-                    pygame.mixer.music.pause()
             if event.type == pygame.QUIT:
                 self.save_info_in_game_stats()
                 self.game_state.save()
@@ -356,8 +335,8 @@ class Game:
         game_state = GameState()
         if not path.exists('jsons'):
             makedirs('jsons')
-        if not path.isfile('game_state.json'):
-            with open('game_state.json', 'w'):
+        if not path.isfile('jsons/game_state.json'):
+            with open('jsons/game_state.json', 'w'):
                 pass
             game_state = self.load_fresh_game()
             game_state.save()
