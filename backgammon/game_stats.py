@@ -1,0 +1,41 @@
+import json
+from os import path, makedirs
+from backgammon.bots.smart_bot import SmartBot
+from backgammon.bots.stupid_bot import StupidBot
+from backgammon.constants import BLACK
+
+
+class GameState:
+    def __init__(self):
+        self.name_of_bot = None
+        self.bot = None
+        self.columns = []
+        self.dices = []
+        self.current_color = 1
+        self.dictionary_of_bots = {
+            "None": None,
+            "Stupid": StupidBot(BLACK),
+            "Smart": SmartBot(BLACK)
+        }
+
+    def save(self):
+        game_state = {
+            'bot': self.name_of_bot,
+            'columns': self.columns,
+            'dices': self.dices,
+            'current_step': self.current_color
+        }
+
+        if not path.exists('jsons'):
+            makedirs('jsons')
+
+        with open('jsons/game_state.json', 'w') as file:
+            json.dump(game_state, file, indent=4)
+
+    def load(self):
+        with (open('jsons/game_state.json', 'r') as f):
+            game_state = json.load(f)
+            self.bot = self.dictionary_of_bots[game_state['bot']]
+            self.columns = game_state['columns']
+            self.dices = game_state['dices']
+            self.current_color = game_state['current_step']

@@ -1,10 +1,9 @@
-from nards.bots.bot import Bot
 import random
-from nards.move import *
 import copy
+from backgammon.move import Move
 
 
-class SmartBot(Bot):
+class SmartBot:
     def __init__(self, color):
         self.color = color
 

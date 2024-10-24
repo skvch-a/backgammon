@@ -1,8 +1,7 @@
-from nards.bots.bot import Bot
-from nards.move import *
+from backgammon.move import Move
 
 
-class StupidBot(Bot):
+class StupidBot:
     def __init__(self, color):
         self.color = color
 

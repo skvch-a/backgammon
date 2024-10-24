@@ -1,8 +1,8 @@
 import pygame
 
-from move import Move
-from pike import Pike
-from constants import *
+from backgammon.move import Move
+from backgammon.pike import Pike
+from backgammon.constants import *
 
 
 class DrawingField:

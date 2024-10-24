@@ -1,5 +1,5 @@
 import unittest
-from nards.game import *
+from backgammon.game import *
 
 
 class NerdsTests(unittest.TestCase):
