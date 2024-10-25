@@ -7,7 +7,7 @@ from backgammon.constants import *
 from backgammon.field import Field
 from backgammon.move import Move
 from backgammon.column import Column
-from backgammon.controls import update_controls
+from backgammon.utils import update_controls, get_image
 from backgammon.drawing_field import DrawingField
 from backgammon.game_stats import GameState
 from backgammon.color_saves import ColorsSaver
@@ -30,7 +30,7 @@ class Game:
         self.needed_color = ColorsSaver()
         self.secret_flag = False
 
-
+        pygame.init()
         pygame.font.init()
         self.screen = pygame.display.set_mode((900, 600))
         self.drawing_field = DrawingField(self.field)
@@ -39,62 +39,40 @@ class Game:
 
         self.bot = StupidBot(BLACK)
 
+
     def menu(self):
+        hotseat_mode_button_rect = pygame.Rect(0, 75, MENU_BUTTON_WIDTH, MODE_BUTTON_HEIGHT)
+        stupid_bot_mode_button_rect = pygame.Rect(MENU_BUTTON_WIDTH, 75, MENU_BUTTON_WIDTH, MODE_BUTTON_HEIGHT)
+        smart_bot_button_rect = pygame.Rect(2 * MENU_BUTTON_WIDTH, 75, MENU_BUTTON_WIDTH, MODE_BUTTON_HEIGHT)
+        play_button_rect = pygame.Rect(0.75 * MENU_BUTTON_WIDTH, 400, 500, 200)
 
-        pygame.mixer.pre_init(44100, -16, 2, 2048)
-        pygame.init()
-        pygame.mixer.init()
-        pygame.mixer.music.load("assets/music/" + self.music[self.number_of_music])
-        pygame.mixer.music.play(-1)
-
-        button_pvp_rect = pygame.Rect(0, 75, MENU_BUTTON_WIDTH, 300)
-        button_pve_stupid_rect = pygame.Rect(MENU_BUTTON_WIDTH, 75, MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT)
-        button_pve_smart_rect = pygame.Rect(2 * MENU_BUTTON_WIDTH, 75, MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT)
-        button_continue_rect = pygame.Rect(0.75 * MENU_BUTTON_WIDTH, 400, 500, 200)
-
-        button_pvp_image = pygame.image.load("assets/images/Человек.jpg")
-        button_pvp_image = pygame.transform.scale(
-            button_pvp_image, button_pvp_rect.size
-        )
-
-        button_pve_stupid_image = pygame.image.load("assets/images/Тупой.png")
-        button_pve_stupid_image = pygame.transform.scale(
-            button_pve_stupid_image, button_pve_stupid_rect.size
-        )
-
-        button_pve_smart_image = pygame.image.load("assets/images/Умный дом.png")
-        button_pve_smart_image = pygame.transform.scale(
-            button_pve_smart_image, button_pve_stupid_rect.size
-        )
-
-        button_continue_image = pygame.image.load("assets/images/continue.png")
-        button_continue_image = pygame.transform.scale(
-            button_continue_image, button_continue_rect.size
-        )
-
+        hotseat_mode_button_image = get_image(hotseat_mode_button_rect, HOTSEAT_MODE_BUTTON_PATH)
+        stupid_bot_mode_button_image = get_image(stupid_bot_mode_button_rect, STUPID_BOT_MODE_BUTTON_PATH)
+        smart_bot_mode_button_image = get_image(stupid_bot_mode_button_rect, SMART_BOT_MODE_BUTTON_PATH)
+        play_button_image = get_image(play_button_rect, PLAY_BUTTON_PATH)
 
         while True:
-            self.screen.fill((255, 255, 255))
-            self.screen.blit(button_pvp_image, button_pvp_rect)
-            self.screen.blit(button_pve_stupid_image, button_pve_stupid_rect)
-            self.screen.blit(button_pve_smart_image, button_pve_smart_rect)
-            self.screen.blit(button_continue_image, button_continue_rect)
+            self.screen.fill(BG_COLOR)
+            self.screen.blit(hotseat_mode_button_image, hotseat_mode_button_rect)
+            self.screen.blit(stupid_bot_mode_button_image, stupid_bot_mode_button_rect)
+            self.screen.blit(smart_bot_mode_button_image, smart_bot_button_rect)
+            self.screen.blit(play_button_image, play_button_rect)
 
             pygame.time.wait(16)
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
-                    if button_pvp_rect.collidepoint(mouse_pos):
+                    if hotseat_mode_button_rect.collidepoint(mouse_pos):
                         self.bot = None
                         return
-                    elif button_pve_stupid_rect.collidepoint(mouse_pos):
+                    elif stupid_bot_mode_button_rect.collidepoint(mouse_pos):
                         self.bot = StupidBot(BLACK)
                         return
-                    elif button_pve_smart_rect.collidepoint(mouse_pos):
+                    elif smart_bot_button_rect.collidepoint(mouse_pos):
                         self.bot = SmartBot(BLACK)
                         return
-                    elif button_continue_rect.collidepoint(mouse_pos):
+                    elif play_button_rect.collidepoint(mouse_pos):
                         self.is_new_game = False
                         return
             pygame.display.update()
@@ -339,8 +317,8 @@ class Game:
         game_state = GameState()
         if not path.exists('jsons'):
             makedirs('jsons')
-        if not path.isfile('jsons/game_state.json'):
-            with open('jsons/game_state.json', 'w'):
+        if not path.isfile('leaderboard.json'):
+            with open('leaderboard.json', 'w'):
                 pass
             game_state = self.load_fresh_game()
             game_state.save()
