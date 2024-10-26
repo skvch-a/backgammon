@@ -5,7 +5,7 @@ NONE = 2
 TITLE = "Alien Nards"
 
 MENU_BUTTON_WIDTH = 300
-MENU_BUTTON_HEIGHT = 500
+MENU_BUTTON_HEIGHT = 400
 
 BG_COLOR = (41, 49, 51)
 
@@ -17,5 +17,7 @@ MUSIC_PATH = 'assets/music/alien_music.mp3'
 FIELD_PATH = "assets/images/field.png"
 CHECKER_BLACK_PATH = "assets/images/checker_black.png"
 CHECKER_WHITE_PATH = "assets/images/checker_white.png"
+
+FIELD_POS = (84, 220)
 
 DICE_SIZE = (50, 50)

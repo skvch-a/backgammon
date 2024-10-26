@@ -7,9 +7,10 @@ from backgammon.constants import *
 from backgammon.drawing_field import DrawingField
 from backgammon.field import Field
 from backgammon.event_handler import EventHandler
-from backgammon.menu import choose_game_mode
+from backgammon.menu import run_menu
 from backgammon.move import Move
-from backgammon.utils import update_controls
+from backgammon.utils import *
+from backgammon.renderer import Renderer
 
 
 class Game:
@@ -42,7 +43,7 @@ class Game:
     def run(self):
         pygame.mixer.music.load(MUSIC_PATH)
         pygame.mixer.music.play(-1)
-        self.bot = choose_game_mode(self.screen)
+        self.bot = run_menu(self.screen)
 
         while self.winner == NONE:
             if not self.field.has_legal_move(self.dices, self.current_color):

@@ -2,6 +2,7 @@ import pygame
 from backgammon.constants import *
 from backgammon.move import Move
 from backgammon.pike import Pike
+from backgammon.renderer import Renderer
 
 
 class DrawingField:
@@ -16,12 +17,11 @@ class DrawingField:
             self.dice_sprites.append(pygame.transform.scale(sprite, DICE_SIZE))
         self.screen = screen
         self.image = pygame.image.load(FIELD_PATH)
-        self.x_coord = 84
-        self.y_coord = 220
         self.positions = []
         self.position_down = []
         self.fill_positions()
         self.pikes = []
+        self.renderer = Renderer(game)
         self.houses_pikes = [Pike(0, 0, 0, 0)] * 2
         for pos in self.positions:
             self.pikes.append(Pike(pos[0], pos[1], 190, 27))
@@ -30,7 +30,7 @@ class DrawingField:
 
 
     def output(self, dices):
-        self.screen.blit(self.image, (self.x_coord, self.y_coord))
+        self.screen.blit(self.image, FIELD_POS)
         possible_moves, selected_set = self.check_selected(dices)
 
         self.fill_pikes(possible_moves, selected_set)
@@ -45,7 +45,7 @@ class DrawingField:
             for i in range(column.count):
                 self.draw_checker(pike.center_x, pike.y + pike.height / 15 * i, sprite)
 
-        self.draw_dices(dices)
+        self.renderer.draw_dices(dices)
 
     def check_selected(self, dices):
         selected_set = set()
@@ -103,31 +103,8 @@ class DrawingField:
             else:
                 pike.color = pike.default_color
 
-    def draw_dices(self, dices):
-        # Определяем координаты и размеры прямоугольника
-        rect_width = 130  # Ширина прямоугольника
-        rect_height = 70 # Высота прямоугольника
-        rect_x = self.x_coord + 310  # X-координата прямоугольника
-        rect_y = self.y_coord - 100  # Y-координата прямоугольника
-
-        if self.game.current_color == WHITE:
-            rect_color = (255, 255, 255)
-        else:
-            rect_color = (0, 0, 0)
-        pygame.draw.rect(self.screen, rect_color, (rect_x, rect_y, rect_width, rect_height))
-
-        # Рисуем кубики внутри прямоугольника
-        indent = 0
-        for dice_index in dices:
-            self.screen.blit(
-                self.dice_sprites[dice_index - 1],
-                (rect_x + indent * 60 + 10, rect_y + 10),  # С небольшим отступом от границ прямоугольника
-            )
-            indent += 1
-
-
     def fill_positions(self):
-        first_position = (self.x_coord + 666, self.y_coord + 42)
+        first_position = (FIELD_POS[0] + 666, FIELD_POS[1] + 42)
         self.positions.append(first_position)
         for i in range(1, 12):
             if i == 6:
@@ -139,7 +116,7 @@ class DrawingField:
                     (self.positions[i - 1][0] - 50, first_position[1])
                 )
 
-        first_position_down = (self.x_coord + 62, self.y_coord + 504)
+        first_position_down = (FIELD_POS[0] + 62, FIELD_POS[1] + 504)
         self.position_down.append(first_position_down)
         for i in range(1, 12):
             if i == 6:
