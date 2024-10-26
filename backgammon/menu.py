@@ -1,35 +1,34 @@
 import pygame
-from menu_button import MenuButton
-from backgammon.bots.stupid_bot import StupidBot
+
 from backgammon.bots.smart_bot import SmartBot
-from backgammon.constants import HOTSEAT_BUTTON_PATH, STUPID_BOT_BUTTON_PATH, SMART_BOT_BUTTON_PATH
+from backgammon.bots.stupid_bot import StupidBot
+from backgammon.menu_button import MenuButton
+from .constants import HOTSEAT_BUTTON_PATH, STUPID_BOT_BUTTON_PATH, SMART_BOT_BUTTON_PATH, SCREEN_SIZE, MENU_BG_PATH
+from .utils import get_image
 
 
-def run_menu(screen):
-    background_image = pygame.image.load("assets/images/menu.png")
-    background_image = pygame.transform.scale(background_image, screen.get_size())
-    hotseat_button = MenuButton(0, HOTSEAT_BUTTON_PATH)
-    stupid_bot_button = MenuButton(1, STUPID_BOT_BUTTON_PATH)
-    smart_bot_button = MenuButton(2, SMART_BOT_BUTTON_PATH)
+class Menu:
+    def __init__(self, event_handler, renderer):
+        self.event_handler = event_handler
+        self.renderer = renderer
+        self.menu_buttons = []
+        self.load_buttons()
+        self.background_image = get_image(MENU_BG_PATH, SCREEN_SIZE)
 
-    while True:
-        screen.blit(background_image, (0, 0))
-        hotseat_button.draw(screen)
-        stupid_bot_button.draw(screen)
-        smart_bot_button.draw(screen)
+    def load_buttons(self):
+        button_image_paths = [HOTSEAT_BUTTON_PATH, STUPID_BOT_BUTTON_PATH, SMART_BOT_BUTTON_PATH]
+        for i in range(3):
+            self.menu_buttons.append(MenuButton(i, button_image_paths[i]))
 
-        events = pygame.event.get()
-        for event in events:
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
-                if hotseat_button.is_pressed(mouse_pos):
-                    return
-                elif stupid_bot_button.is_pressed(mouse_pos):
-                    return StupidBot()
-                elif smart_bot_button.is_pressed(mouse_pos):
-                    return SmartBot()
-
-        pygame.display.update()
+    def choose_game_mode(self):
+        while True:
+            self.renderer.draw_menu_background(self.background_image)
+            self.renderer.draw_buttons(self.menu_buttons)
+            pressed_button_index = self.event_handler.handle_menu_events(self.menu_buttons)
+            if pressed_button_index == 0:
+                return
+            elif pressed_button_index == 1:
+                return StupidBot()
+            elif pressed_button_index == 2:
+                return SmartBot()
+            pygame.display.update()

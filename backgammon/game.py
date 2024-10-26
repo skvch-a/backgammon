@@ -7,7 +7,7 @@ from backgammon.constants import *
 from backgammon.drawing_field import DrawingField
 from backgammon.field import Field
 from backgammon.event_handler import EventHandler
-from backgammon.menu import run_menu
+from backgammon.menu import Menu
 from backgammon.move import Move
 from backgammon.utils import *
 from backgammon.renderer import Renderer
@@ -25,8 +25,9 @@ class Game:
         self.needed_color = ColorsSaver()
         self.secret_flag = False
 
+        self.renderer = Renderer(self)
         pygame.init()
-        self.screen = pygame.display.set_mode((900, 800))
+        self.screen = pygame.display.set_mode(SCREEN_SIZE)
         self.drawing_field = DrawingField(self.field, self.screen, self)
         pygame.display.set_caption(TITLE)
         self.font = pygame.font.SysFont("Impact", 40)
@@ -36,6 +37,7 @@ class Game:
                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [], [], [], [], [], [], [], [], [], [], []]]
 
         self.event_handler = EventHandler(self)
+        self.menu = Menu(self.event_handler, self.renderer)
 
     def change_color(self):
         self.current_color = (self.current_color + 1) % 2
@@ -43,7 +45,7 @@ class Game:
     def run(self):
         pygame.mixer.music.load(MUSIC_PATH)
         pygame.mixer.music.play(-1)
-        self.bot = run_menu(self.screen)
+        self.bot = self.menu.choose_game_mode()
 
         while self.winner == NONE:
             if not self.field.has_legal_move(self.dices, self.current_color):
@@ -52,7 +54,7 @@ class Game:
                 update_controls(
                     BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color
                 )
-                self.draw_turn_text()
+                self.renderer.draw_turn_text()
                 pygame.display.update()
                 continue
 
@@ -69,7 +71,7 @@ class Game:
                 self.current_color = (self.current_color + 1) % 2
                 continue
 
-            self.event_handler.handle_events()
+            self.event_handler.handle_game_events()
             self.make_move_by_mouse()
 
             if len(self.dices) == 0:
@@ -77,7 +79,7 @@ class Game:
                 self.current_color = (self.current_color + 1) % 2
 
             update_controls(BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color)
-            self.draw_turn_text()
+            self.renderer.draw_turn_text()
             pygame.display.update()
 
         while True:
@@ -133,11 +135,4 @@ class Game:
             self.winner = WHITE
             pygame.time.wait(10)
             pygame.quit()
-
-    def draw_text(self, text, pos):
-        self.screen.blit(self.font.render(text, True, (81, 179, 41), BG_COLOR), pos)
-
-    def draw_turn_text(self):
-        colors = ("Black", "White")
-        self.draw_text(f"{colors[self.current_color]} Aliens turn", (320, 30))
 

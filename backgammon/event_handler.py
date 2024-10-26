@@ -6,19 +6,17 @@ class EventHandler:
     def __init__(self, game):
         self._game = game
 
-    @staticmethod
-    def check_for_quit(events):
-        for event in events:
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                exit()
-
-    def handle_events(self):
+    def handle_game_events(self):
         events = pygame.event.get()
         self.check_for_quit(events)
         self.select_dice(events)
         self.select_pike(events)
         self.make_move_by_pressing_button(events)
+
+    def handle_menu_events(self, menu_buttons):
+        events = pygame.event.get()
+        self.check_for_quit(events)
+        return self.get_pressed_button_index(events, menu_buttons)
 
     def select_dice(self, events):
         for event in events:
@@ -63,3 +61,19 @@ class EventHandler:
                     if self._game.field.is_correct(move):
                         self._game.field.make_move(move)
                         self._game.dices.pop(self._game.current_dice)
+
+    @staticmethod
+    def check_for_quit(events):
+        for event in events:
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                exit()
+
+    @staticmethod
+    def get_pressed_button_index(events, buttons):
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                for button_index in range(len(buttons)):
+                    if buttons[button_index].is_pressed(mouse_pos):
+                        return button_index

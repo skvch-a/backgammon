@@ -8,6 +8,9 @@ MENU_BUTTON_WIDTH = 300
 MENU_BUTTON_HEIGHT = 400
 
 BG_COLOR = (41, 49, 51)
+PIKE_DEFAULT_COLOR = (0, 233, 245)
+PIKE_SELECTED_COLOR = (134, 5, 5)
+PIKE_POSSIBLE_MOVE_COLOR = (0, 245, 115)
 
 HOTSEAT_BUTTON_PATH = "assets/images/hotseat.png"
 STUPID_BOT_BUTTON_PATH = "assets/images/stupid_bot.png"
@@ -17,7 +20,9 @@ MUSIC_PATH = 'assets/music/alien_music.mp3'
 FIELD_PATH = "assets/images/field.png"
 CHECKER_BLACK_PATH = "assets/images/checker_black.png"
 CHECKER_WHITE_PATH = "assets/images/checker_white.png"
+MENU_BG_PATH = "assets/images/menu.png"
 
 FIELD_POS = (84, 220)
 
 DICE_SIZE = (50, 50)
+SCREEN_SIZE = (900, 800)

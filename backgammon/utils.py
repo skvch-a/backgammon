@@ -10,5 +10,5 @@ def update_controls(bg_color, screen, field, dices, secret_flag, needed_color):
         field.output(dices)
         needed_color.set_color(10, 5, 3)
 
-def get_image(rect, path):
-    return transform.scale(image.load(path), rect.size)
+def get_image(path, size):
+    return transform.scale(image.load(path), size)

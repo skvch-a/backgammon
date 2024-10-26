@@ -34,11 +34,6 @@ class Field:
         else:
             self.columns[move.end].push(a)
 
-    def log(self):
-        for i in self.columns:
-            print(i.checkers)
-        print(self.houses[WHITE].count, self.houses[BLACK].count)
-
     def is_correct(self, move, dice=None):
 
         if move is None:

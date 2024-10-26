@@ -1,12 +1,14 @@
 import pygame
 
+from backgammon.constants import PIKE_DEFAULT_COLOR, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR
+
 
 class Pike:
     def __init__(self, center_x, y, height, width):
-        self.color = pygame.Color(0, 0, 0)
-        self.default_color = pygame.Color(128, 128, 128)
-        self.selected_color = pygame.Color(0, 0, 0)
-        self.possible_move_color = pygame.Color(0, 255, 0)
+        self.color = (0, 0, 0)
+        self.default_color = PIKE_DEFAULT_COLOR
+        self.selected_color = PIKE_SELECTED_COLOR
+        self.possible_move_color = PIKE_POSSIBLE_MOVE_COLOR
         self.center_x = center_x
         self.y = y
         self.height = height

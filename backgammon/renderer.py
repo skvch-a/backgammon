@@ -27,3 +27,17 @@ class Renderer:
         for dice_index in dices:
             self._game.screen.blit(self.dice_sprites[dice_index - 1], (rect_x + indent * 60 + 10, rect_y + 10))
             indent += 1
+
+    def draw_text(self, text, pos):
+        self._game.screen.blit(self._game.font.render(text, True, (81, 179, 41), BG_COLOR), pos)
+
+    def draw_turn_text(self):
+        colors = ("Black", "White")
+        self.draw_text(f"{colors[self._game.current_color]} Aliens turn", (320, 30))
+
+    def draw_menu_background(self, background_image):
+        self._game.screen.blit(background_image, (0, 0))
+
+    def draw_buttons(self, buttons):
+        for button in buttons:
+            button.draw(self._game.screen)
