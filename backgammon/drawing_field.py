@@ -1,12 +1,11 @@
 import pygame
-
 from backgammon.constants import *
 from backgammon.move import Move
 from backgammon.pike import Pike
 
 
 class DrawingField:
-    def __init__(self, field):
+    def __init__(self, field, screen):
         self.field = field
         self.white_sprite = pygame.image.load("assets/images/Checker-white.png")
         self.black_sprite = pygame.image.load("assets/images/Checker-neger.png")
@@ -14,10 +13,10 @@ class DrawingField:
         for i in range(1, 7):
             sprite = pygame.image.load(f"assets/images/dice_{i}.png")
             self.dice_sprites[i] = pygame.transform.scale(sprite, (50, 50))
-        self.screen = pygame.display.set_mode((900, 600))
+        self.screen = screen
         self.image = pygame.image.load("assets/images/field.png")
-        self.x_coord = 50
-        self.y_coord = 30
+        self.x_coord = 84
+        self.y_coord = 120
         self.positions = []
         self.position_down = []
         self.fill_positions()

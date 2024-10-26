@@ -31,11 +31,13 @@ class Game:
         self.secret_flag = False
 
         pygame.init()
+        pygame.display.init()
         pygame.font.init()
-        self.screen = pygame.display.set_mode((900, 600))
-        self.drawing_field = DrawingField(self.field)
+        self.screen = pygame.display.set_mode((900, 800))
+        pygame.display.flip()
+        self.drawing_field = DrawingField(self.field, self.screen)
         pygame.display.set_caption(TITLE)
-        self.font = pygame.font.SysFont("Comic Sans", 18)
+        self.font = pygame.font.SysFont("Impact", 40)
         self.bot = StupidBot()
 
 
@@ -142,14 +144,13 @@ class Game:
             pygame.time.wait(10)
             pygame.quit()
 
+    def draw_text_util(self, text, pos):
+        self.screen.blit(self.font.render(text, True, (81, 179, 41), BG_COLOR), pos)
+
     def draw_text(self):
         if (self.current_color % 2) == 1:
-            text_surface = self.font.render(
-                f"White move", 0, (0, 0, 0), (255, 255, 255)
-            )
+            self.draw_text_util("Ход Белых", (360, 30))
         else:
-            text_surface = self.font.render(
-                f"Black move", 0, (0, 0, 0), (255, 255, 255)
-            )
-        self.screen.blit(text_surface, (350, 0))
+            self.draw_text_util("Ход Черных", (360, 30))
+
 

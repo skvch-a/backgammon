@@ -2,12 +2,12 @@ BLACK = 0
 WHITE = 1
 NONE = 2
 
-TITLE = "Нарды"
+TITLE = "Alien Nards"
 
 MENU_BUTTON_WIDTH = 300
 MENU_BUTTON_HEIGHT = 300
 
-BG_COLOR = (5, 50, 136)
+BG_COLOR = (41, 49, 51)
 
 HOTSEAT_BUTTON_PATH = "assets/images/hotseat.jpg"
 STUPID_BOT_BUTTON_PATH = "assets/images/stupid_bot.png"
