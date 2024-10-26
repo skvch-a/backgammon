@@ -3,7 +3,7 @@ from backgammon.constants import *
 from backgammon.move import Move
 from backgammon.pike import Pike
 from backgammon.game_core.renderer import Renderer
-
+from utils import is_move_correct
 
 class DrawingField:
     def __init__(self, field, screen, game):
