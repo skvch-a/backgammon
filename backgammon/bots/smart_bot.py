@@ -1,14 +1,16 @@
 import random
 import copy
 from backgammon.move import Move
+from backgammon.constants import BLACK
 
 
 class SmartBot:
-    def __init__(self, color):
+    def __init__(self, color=BLACK):
         self.color = color
 
-    def __str__(self):
-        return "Smart"
+    @staticmethod
+    def get_name():
+        return "smart"
 
     def get_moves(self, field, dices):
         field = copy.deepcopy(field)

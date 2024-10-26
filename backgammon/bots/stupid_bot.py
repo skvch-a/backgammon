@@ -1,12 +1,13 @@
 from backgammon.move import Move
-
+from backgammon.constants import BLACK
 
 class StupidBot:
-    def __init__(self, color):
+    def __init__(self, color=BLACK):
         self.color = color
 
-    def __str__(self):
-        return "Stupid"
+    @staticmethod
+    def get_name():
+        return "stupid"
 
     def get_moves(self, field, dices):
         moves = []
