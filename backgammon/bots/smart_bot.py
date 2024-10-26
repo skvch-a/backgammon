@@ -13,8 +13,6 @@ class SmartBot:
         return "smart"
 
     def get_moves(self, field, dices):
-        field = copy.deepcopy(field)
-
         diapason = list(range(23))
         what_move = [0, 1, 2]
         random.shuffle(what_move)

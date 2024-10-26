@@ -41,7 +41,7 @@ class EventHandler:
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
-                selected = self._game.drawing_field.get_pike_by_coordinates(x, y)
+                selected = self._game.field.get_pike_by_coordinates(x, y)
                 target_column_color = self._game.field.columns[selected].peek()
                 if event.button == 1:
                     if target_column_color == self._game.current_color:

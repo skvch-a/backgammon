@@ -20,7 +20,7 @@ class NerdsTests(unittest.TestCase):
 
     @staticmethod
     def create_empty_field():
-        field = Field()
+        field = Field(Renderer(Game()))
         for column in field.columns:
             column.checkers = []
         return field
@@ -57,7 +57,7 @@ class NerdsTests(unittest.TestCase):
         x = 111
         y = 124
 
-        field = DrawingField(self.field_only_black, pygame.display.set_mode((900, 800)))
+        field = Field(Renderer(Game()))
         self.assertTrue(field.pikes[11].is_inside(x, y))
 
     def test_is_there_legal_move(self):
@@ -133,7 +133,7 @@ class NerdsTests(unittest.TestCase):
         self.assertFalse(field.can_endgame(BLACK))
 
     def test_bot_gives_legal_moves(self):
-        field = Field()
+        field = Field(Renderer(Game()))
         bot_white = StupidBot(WHITE)
         bot_black = SmartBot(BLACK)
 
