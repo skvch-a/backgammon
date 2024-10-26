@@ -5,18 +5,19 @@ from backgammon.pike import Pike
 
 
 class DrawingField:
-    def __init__(self, field, screen):
+    def __init__(self, field, screen, game):
         self.field = field
-        self.white_sprite = pygame.image.load("assets/images/checker_white.png")
-        self.black_sprite = pygame.image.load("assets/images/checker_black.png")
-        self.dice_sprites = [self.white_sprite] * 7
+        self.game = game
+        self.white_sprite = pygame.image.load(CHECKER_WHITE_PATH)
+        self.black_sprite = pygame.image.load(CHECKER_BLACK_PATH)
+        self.dice_sprites = []
         for i in range(1, 7):
             sprite = pygame.image.load(f"assets/images/dice_{i}.png")
-            self.dice_sprites[i] = pygame.transform.scale(sprite, (50, 50))
+            self.dice_sprites.append(pygame.transform.scale(sprite, DICE_SIZE))
         self.screen = screen
-        self.image = pygame.image.load("assets/images/field.png")
+        self.image = pygame.image.load(FIELD_PATH)
         self.x_coord = 84
-        self.y_coord = 120
+        self.y_coord = 220
         self.positions = []
         self.position_down = []
         self.fill_positions()
@@ -27,19 +28,12 @@ class DrawingField:
         for pos_down in self.position_down:
             self.pikes.append(Pike(pos_down[0], pos_down[1], -190, 27))
 
-        black_house_pos = (self.x_coord - 20, self.y_coord)
-        white_house_pos = (self.x_coord + self.image.get_width() + 20, self.y_coord)
-        self.houses_pikes[WHITE] = Pike(white_house_pos[0], white_house_pos[1], 190, 27)
-        self.houses_pikes[WHITE].color = (255, 192, 203)
-        self.houses_pikes[BLACK] = Pike(black_house_pos[0], black_house_pos[1], 190, 27)
-        self.houses_pikes[BLACK].color = (255, 192, 203)
 
     def output(self, dices):
         self.screen.blit(self.image, (self.x_coord, self.y_coord))
         possible_moves, selected_set = self.check_selected(dices)
 
         self.fill_pikes(possible_moves, selected_set)
-
         self.fill_columns()
 
         for color in range(2):
@@ -60,7 +54,6 @@ class DrawingField:
             selected = self.field.selected
             if selected == i:
                 selected_set.add(i)
-                a = self.field.columns[selected].peek()
                 for j in dices:
                     if not is_move_in_range(
                             i, (i + j) % 24, self.field.columns[selected].peek()
@@ -111,13 +104,27 @@ class DrawingField:
                 pike.color = pike.default_color
 
     def draw_dices(self, dices):
-        c = 0
-        for i in dices:
+        # Определяем координаты и размеры прямоугольника
+        rect_width = 130  # Ширина прямоугольника
+        rect_height = 70 # Высота прямоугольника
+        rect_x = self.x_coord + 310  # X-координата прямоугольника
+        rect_y = self.y_coord - 100  # Y-координата прямоугольника
+
+        if self.game.current_color == WHITE:
+            rect_color = (255, 255, 255)
+        else:
+            rect_color = (0, 0, 0)
+        pygame.draw.rect(self.screen, rect_color, (rect_x, rect_y, rect_width, rect_height))
+
+        # Рисуем кубики внутри прямоугольника
+        indent = 0
+        for dice_index in dices:
             self.screen.blit(
-                self.dice_sprites[i],
-                (self.x_coord + 320 + c * 50, self.y_coord + c + 250),
+                self.dice_sprites[dice_index - 1],
+                (rect_x + indent * 60 + 10, rect_y + 10),  # С небольшим отступом от границ прямоугольника
             )
-            c += 1
+            indent += 1
+
 
     def fill_positions(self):
         first_position = (self.x_coord + 666, self.y_coord + 42)

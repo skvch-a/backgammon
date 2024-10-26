@@ -1,15 +1,11 @@
 import random
-from os import walk
-
 import pygame
 
-from backgammon.bots.stupid_bot import StupidBot
 from backgammon.color_saves import ColorsSaver
 from backgammon.column import Column
 from backgammon.constants import *
 from backgammon.drawing_field import DrawingField
 from backgammon.field import Field
-from backgammon.game_stats import GameState
 from backgammon.event_handler import EventHandler
 from backgammon.menu import choose_game_mode
 from backgammon.move import Move
@@ -25,41 +21,37 @@ class Game:
         self.current_color = 1
         self.last_dice = (-1, WHITE)
         self.selected_pike = 0
-
-        self.is_new_game = True
         self.needed_color = ColorsSaver()
         self.secret_flag = False
 
         pygame.init()
-        pygame.display.init()
-        pygame.font.init()
         self.screen = pygame.display.set_mode((900, 800))
-        pygame.display.flip()
-        self.drawing_field = DrawingField(self.field, self.screen)
+        self.drawing_field = DrawingField(self.field, self.screen, self)
         pygame.display.set_caption(TITLE)
         self.font = pygame.font.SysFont("Impact", 40)
-        self.bot = StupidBot()
-
-
+        self.bot = None
         self.field.columns = [Column(i) for i in
                               [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [], [], [], [], [], [], [], [], [], [], [],
                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [], [], [], [], [], [], [], [], [], [], []]]
 
         self.event_handler = EventHandler(self)
 
+    def change_color(self):
+        self.current_color = (self.current_color + 1) % 2
+
     def run(self):
-        choose_game_mode(self.screen)
+        pygame.mixer.music.load(MUSIC_PATH)
+        pygame.mixer.music.play(-1)
+        self.bot = choose_game_mode(self.screen)
 
         while self.winner == NONE:
-            if not self.field.is_there_legal_move(self.dices, self.current_color):
-
+            if not self.field.has_legal_move(self.dices, self.current_color):
                 self.throw_bones()
-                self.current_color = (self.current_color + 1) % 2
+                self.change_color()
                 update_controls(
                     BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color
                 )
-                self.draw_text()
-                pygame.time.wait(16)
+                self.draw_turn_text()
                 pygame.display.update()
                 continue
 
@@ -83,11 +75,8 @@ class Game:
                 self.throw_bones()
                 self.current_color = (self.current_color + 1) % 2
 
-            update_controls(
-                BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color
-            )
-            self.draw_text()
-            pygame.time.wait(16)
+            update_controls(BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color)
+            self.draw_turn_text()
             pygame.display.update()
 
         while True:
@@ -144,13 +133,10 @@ class Game:
             pygame.time.wait(10)
             pygame.quit()
 
-    def draw_text_util(self, text, pos):
+    def draw_text(self, text, pos):
         self.screen.blit(self.font.render(text, True, (81, 179, 41), BG_COLOR), pos)
 
-    def draw_text(self):
-        if (self.current_color % 2) == 1:
-            self.draw_text_util("Ход Белых", (360, 30))
-        else:
-            self.draw_text_util("Ход Черных", (360, 30))
-
+    def draw_turn_text(self):
+        colors = ("Black", "White")
+        self.draw_text(f"{colors[self.current_color]} Aliens turn", (320, 30))
 

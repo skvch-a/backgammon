@@ -1,4 +1,7 @@
 import unittest
+
+from backgammon.bots.smart_bot import SmartBot
+from backgammon.bots.stupid_bot import StupidBot
 from backgammon.game import *
 
 
@@ -54,7 +57,7 @@ class NerdsTests(unittest.TestCase):
         x = 111
         y = 124
 
-        field = DrawingField(self.field_only_black)
+        field = DrawingField(self.field_only_black, pygame.display.set_mode((900, 800)))
         self.assertTrue(field.pikes[11].is_inside(x, y))
 
     def test_is_there_legal_move(self):
@@ -64,8 +67,8 @@ class NerdsTests(unittest.TestCase):
         columns[1].push(BLACK)
         columns[2].push(BLACK)
         dices = [1, 1]
-        self.assertFalse(field.is_there_legal_move(dices, WHITE))
-        self.assertTrue(field.is_there_legal_move(dices, BLACK))
+        self.assertFalse(field.has_legal_move(dices, WHITE))
+        self.assertTrue(field.has_legal_move(dices, BLACK))
 
     def test_is_there_legal_move_sum_of_moves_is_legal(self):
         field = self.create_empty_field()
@@ -74,20 +77,20 @@ class NerdsTests(unittest.TestCase):
         columns[1].push(BLACK)
         columns[2].push(BLACK)
         dices = [1, 2]
-        self.assertTrue(field.is_there_legal_move(dices, WHITE))
+        self.assertTrue(field.has_legal_move(dices, WHITE))
 
     def test_is_there_legal_move_step_out(self):
         field = self.create_empty_field()
         columns = field.columns
         columns[11].push(BLACK)
         dices = [2, 2]
-        self.assertFalse(field.is_there_legal_move(dices, BLACK))
+        self.assertFalse(field.has_legal_move(dices, BLACK))
 
         field = self.create_empty_field()
         columns = field.columns
         columns[10].push(BLACK)
         dices = [2, 2]
-        self.assertFalse(field.is_there_legal_move(dices, BLACK))
+        self.assertFalse(field.has_legal_move(dices, BLACK))
 
     def test_is_there_legal_can_endgame(self):
         field = self.create_empty_field()
@@ -95,7 +98,7 @@ class NerdsTests(unittest.TestCase):
         for i in range(12):
             columns[11].push(BLACK)
         dices = [random.randint(1, 6), random.randint(1, 6)]
-        self.assertTrue(field.is_there_legal_move(dices, BLACK))
+        self.assertTrue(field.has_legal_move(dices, BLACK))
 
     def test_can_endgame_house_is_empty(self):
         field = self.create_empty_field()

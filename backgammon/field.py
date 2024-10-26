@@ -74,7 +74,7 @@ class Field:
 
         return True
 
-    def is_there_legal_move(self, dices, color):
+    def has_legal_move(self, dices, color):
         dices = dices.copy()
         dices.append(sum(dices))
         for dice in dices:
