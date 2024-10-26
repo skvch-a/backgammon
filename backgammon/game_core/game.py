@@ -25,10 +25,11 @@ class Game:
         self.needed_color = ColorsSaver()
         self.secret_flag = False
 
-        self.renderer = Renderer(self)
+
         pygame.init()
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
-        self.drawing_field = DrawingField(self.field, self.screen, self)
+        self.drawing_field = DrawingField(self.field, self)
+        self.renderer = Renderer(self.screen)
         pygame.display.set_caption(TITLE)
         self.font = pygame.font.SysFont("Impact", 40)
         self.bot = None
@@ -52,9 +53,9 @@ class Game:
                 self.throw_bones()
                 self.change_color()
                 update_controls(
-                    BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color
+                    BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color, self.current_color
                 )
-                self.renderer.draw_turn_text()
+                self.renderer.draw_turn_text(self.current_color)
                 pygame.display.update()
                 continue
 
@@ -78,12 +79,12 @@ class Game:
                 self.throw_bones()
                 self.current_color = (self.current_color + 1) % 2
 
-            update_controls(BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color)
-            self.renderer.draw_turn_text()
+            update_controls(BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color, self.current_color)
+            self.renderer.draw_turn_text(self.current_color)
             pygame.display.update()
 
         while True:
-            update_controls(BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.current_color)
+            update_controls(BG_COLOR, self.screen, self.drawing_field, self.dices, self.secret_flag, self.needed_color, self.current_color)
 
             winner = ''
             if self.winner == WHITE:

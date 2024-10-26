@@ -6,22 +6,16 @@ from backgammon.game_core.renderer import Renderer
 from utils import is_move_correct
 
 class DrawingField:
-    def __init__(self, field, screen, game):
+    def __init__(self, field, game):
         self.field = field
         self.game = game
         self.white_sprite = pygame.image.load(CHECKER_WHITE_PATH)
         self.black_sprite = pygame.image.load(CHECKER_BLACK_PATH)
-        self.dice_sprites = []
-        for i in range(1, 7):
-            sprite = pygame.image.load(f"assets/images/dice_{i}.png")
-            self.dice_sprites.append(pygame.transform.scale(sprite, DICE_SIZE))
-        self.screen = screen
-        self.image = pygame.image.load(FIELD_PATH)
         self.positions = []
         self.position_down = []
         self.fill_positions()
         self.pikes = []
-        self.renderer = Renderer(game)
+        self.renderer = Renderer(game.screen)
         self.houses_pikes = [Pike(0, 0, 0, 0)] * 2
         for pos in self.positions:
             self.pikes.append(Pike(pos[0], pos[1], 190, 27))
@@ -29,8 +23,8 @@ class DrawingField:
             self.pikes.append(Pike(pos_down[0], pos_down[1], -190, 27))
 
 
-    def output(self, dices):
-        self.screen.blit(self.image, FIELD_POS)
+    def output(self, dices, current_color):
+        self.renderer.draw_field_bg()
         possible_moves, selected_set = self.check_selected(dices)
 
         self.fill_pikes(possible_moves, selected_set)
@@ -40,12 +34,12 @@ class DrawingField:
             column = self.field.houses[color]
             pike = self.houses_pikes[color]
             sprite = self.white_sprite if color == WHITE else self.black_sprite
-            pike.draw_pikes(self.screen, 1)
+            self.renderer.draw_pike(pike, 1)
 
             for i in range(column.count):
                 self.renderer.draw_checker(pike.center_x, pike.y + pike.height / 15 * i, sprite)
 
-        self.renderer.draw_dices(dices)
+        self.renderer.draw_dices(dices, current_color)
 
     def check_selected(self, dices):
         selected_set = set()
@@ -66,11 +60,11 @@ class DrawingField:
                     possible_moves.add((i + sum(dices)) % 24)
 
             if i % 6 == 2 or i % 6 == 3:
-                self.pikes[i].draw_pikes(self.screen, 3)
+                self.renderer.draw_pike(self.pikes[i],3)
             elif i % 6 == 1 or i % 6 == 4:
-                self.pikes[i].draw_pikes(self.screen, 2)
+                self.renderer.draw_pike(self.pikes[i],2)
             else:
-                self.pikes[i].draw_pikes(self.screen, 1)
+                self.renderer.draw_pike(self.pikes[i],1)
         return possible_moves, selected_set
 
     def fill_columns(self):

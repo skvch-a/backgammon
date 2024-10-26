@@ -14,7 +14,7 @@ class Pike:
         self.height = height
         self.width = width
 
-    def draw_pikes(self, screen, size):
+    def draw(self, screen, size):
         pygame.draw.polygon(
             screen,
             self.color,
