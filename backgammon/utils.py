@@ -1,5 +1,5 @@
 from pygame import transform, image
-
+from constants import WHITE, BLACK
 def update_controls(bg_color, screen, field, dices, secret_flag, needed_color):
     if not secret_flag:
         screen.fill(bg_color)
@@ -12,3 +12,6 @@ def update_controls(bg_color, screen, field, dices, secret_flag, needed_color):
 
 def get_image(path, size):
     return transform.scale(image.load(path), size)
+
+def is_move_correct(start, end, color):
+    return (color == BLACK or start <= end) and (color == WHITE or start >= 12 or end < 12)

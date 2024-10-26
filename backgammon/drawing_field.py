@@ -43,7 +43,7 @@ class DrawingField:
             pike.draw_pikes(self.screen, 1)
 
             for i in range(column.count):
-                self.draw_checker(pike.center_x, pike.y + pike.height / 15 * i, sprite)
+                self.renderer.draw_checker(pike.center_x, pike.y + pike.height / 15 * i, sprite)
 
         self.renderer.draw_dices(dices)
 
@@ -55,12 +55,12 @@ class DrawingField:
             if selected == i:
                 selected_set.add(i)
                 for j in dices:
-                    if not is_move_in_range(
+                    if not is_move_correct(
                             i, (i + j) % 24, self.field.columns[selected].peek()
                     ):
                         continue
                     possible_moves.add((i + j) % 24)
-                if is_move_in_range(
+                if is_move_correct(
                         i, (i + sum(dices)) % 24, self.field.columns[selected].peek()
                 ):
                     possible_moves.add((i + sum(dices)) % 24)
@@ -81,7 +81,7 @@ class DrawingField:
                 sprite = self.white_sprite
                 if column.peek() == 0:
                     sprite = self.black_sprite
-                self.draw_checker(
+                self.renderer.draw_checker(
                     pikes_coordinate[0],
                     pikes_coordinate[1] + self.pikes[i].height / 15 * j,
                     sprite,
@@ -128,21 +128,8 @@ class DrawingField:
                     (self.position_down[i - 1][0] + 50, first_position_down[1])
                 )
 
-    def draw_checker(self, center_x, center_y, sprite):
-        self.screen.blit(sprite, (center_x - 13.5, center_y - 13.5))
-
     def get_pike_by_coordinates(self, x, y):
         for i in range(24):
             if self.pikes[i].is_inside(x, y):
                 return i
         return -1
-
-
-def is_move_in_range(start, end, color):
-    if color == WHITE:
-        if start >= end:
-            return False
-    else:
-        if start < 12 <= end:
-            return False
-    return True

@@ -42,5 +42,5 @@ class Renderer:
         for button in buttons:
             button.draw(self._game.screen)
 
-    def draw_checker(self, center_x, center_y, sprite):
-        self._game.screen.blit(sprite, (center_x - 13.5, center_y - 13.5))
+    def draw_checker(self, x, y, sprite):
+        self._game.screen.blit(sprite, (x - 13.5, y - 13.5))
