@@ -7,8 +7,8 @@ from backgammon.pike import Pike
 class DrawingField:
     def __init__(self, field, screen):
         self.field = field
-        self.white_sprite = pygame.image.load("assets/images/Checker-white.png")
-        self.black_sprite = pygame.image.load("assets/images/Checker-neger.png")
+        self.white_sprite = pygame.image.load("assets/images/checker_white.png")
+        self.black_sprite = pygame.image.load("assets/images/checker_black.png")
         self.dice_sprites = [self.white_sprite] * 7
         for i in range(1, 7):
             sprite = pygame.image.load(f"assets/images/dice_{i}.png")
