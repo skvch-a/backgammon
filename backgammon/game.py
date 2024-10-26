@@ -25,8 +25,7 @@ class Game:
         self.current_color = 1
         self.last_dice = (-1, WHITE)
         self.selected_pike = 0
-        self.music = next(walk("assets/music"), (None, None, []))[2]
-        self.number_of_music = 0
+
         self.is_new_game = True
         self.needed_color = ColorsSaver()
         self.secret_flag = False
@@ -51,7 +50,7 @@ class Game:
 
         while self.winner == NONE:
             if not self.field.is_there_legal_move(self.dices, self.current_color):
-                pygame.time.wait(300)
+
                 self.throw_bones()
                 self.current_color = (self.current_color + 1) % 2
                 update_controls(

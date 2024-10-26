@@ -23,11 +23,11 @@ class EventHandler:
     def select_dice(self, events):
         for event in events:
             if event.type == pygame.KEYDOWN:
-                if event.keyw == pygame.K_1:
+                if event.key == pygame.K_1:
                     self._game.current_dice = 0
                 if event.key == pygame.K_2:
                     self._game.current_dice = 1
-        return self._game.current_dice % len(self._game.dices)
+        self._game.current_dice %= len(self._game.dices)
 
     def select_pike(self, events):
         for event in events:
