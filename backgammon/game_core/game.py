@@ -2,10 +2,10 @@ import random
 import pygame
 
 from backgammon.color_saves import ColorsSaver
-from backgammon.column import Column
+from backgammon.game_objects.column import Column
 from backgammon.constants import *
-from backgammon.drawing_field import DrawingField
-from backgammon.field import Field
+from backgammon.game_objects.field import DrawingField
+from backgammon.game_objects.field import Field
 from backgammon.game_core.event_handler import EventHandler
 from backgammon.game_core.menu import Menu
 from backgammon.move import Move
@@ -17,7 +17,6 @@ class Game:
     def __init__(self):
         self.dices = [3, 4]
         self.current_dice = -1
-        self.field = Field()
         self.winner = NONE
         self.current_color = 1
         self.last_dice = (-1, WHITE)
@@ -28,8 +27,9 @@ class Game:
 
         pygame.init()
         self.screen = pygame.display.set_mode(SCREEN_SIZE)
-        self.drawing_field = DrawingField(self.field, self)
         self.renderer = Renderer(self.screen)
+        self.field = Field(self.renderer)
+        self.drawing_field = DrawingField(self.field, self.renderer)
         pygame.display.set_caption(TITLE)
         self.font = pygame.font.SysFont("Impact", 40)
         self.bot = None
