@@ -6,11 +6,11 @@ from backgammon.column import Column
 from backgammon.constants import *
 from backgammon.drawing_field import DrawingField
 from backgammon.field import Field
-from backgammon.event_handler import EventHandler
-from backgammon.menu import Menu
+from backgammon.game_core.event_handler import EventHandler
+from backgammon.game_core.menu import Menu
 from backgammon.move import Move
 from backgammon.utils import *
-from backgammon.renderer import Renderer
+from backgammon.game_core.renderer import Renderer
 
 
 class Game:

@@ -5,9 +5,8 @@ from backgammon.move import Move
 
 class Field:
     def __init__(self):
-        self.checkers_count = 12
         self.columns = [Column() for _ in range(24)]
-        for i in range(self.checkers_count):
+        for i in range(CHECKERS_COUNT):
             self.columns[0].push(WHITE)
             self.columns[12].push(BLACK)
         self.last_column_index = {WHITE: 23, BLACK: 11}
@@ -35,7 +34,6 @@ class Field:
             self.columns[move.end].push(a)
 
     def is_correct(self, move, dice=None):
-
         if move is None:
             return False
         if dice is not None:
@@ -56,11 +54,8 @@ class Field:
             if move.start > move.end and move.start != 23:
                 return False
 
-        if (
-            self.last_column_index[move.color] == move.start
-            and (self.last_column[move.color].count + self.houses[move.color].count)
-            != self.checkers_count
-        ):
+        if (self.last_column_index[move.color] == move.start
+                and (self.last_column[move.color].count + self.houses[move.color].count) != CHECKERS_COUNT):
             return False
         if end.count == 0:
             return True

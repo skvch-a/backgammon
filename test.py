@@ -2,7 +2,7 @@ import unittest
 
 from backgammon.bots.smart_bot import SmartBot
 from backgammon.bots.stupid_bot import StupidBot
-from backgammon.game import *
+from backgammon.game_core.game import *
 
 
 class NerdsTests(unittest.TestCase):

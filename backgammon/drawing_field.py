@@ -2,7 +2,7 @@ import pygame
 from backgammon.constants import *
 from backgammon.move import Move
 from backgammon.pike import Pike
-from backgammon.renderer import Renderer
+from backgammon.game_core.renderer import Renderer
 
 
 class DrawingField:
