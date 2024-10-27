@@ -2,7 +2,7 @@ import random
 import pygame
 
 from backgammon.utils.color_saves import ColorsSaver
-from backgammon.game_objects.column import Column
+from backgammon.game_objects.point import Point
 from backgammon.constants import *
 from backgammon.game_objects.field import Field
 from backgammon.game_core.event_handler import EventHandler
@@ -30,7 +30,7 @@ class Game:
         self._secret_flag = False
 
         self._bot = None
-        self._field.columns = [Column(i) for i in
+        self._field.columns = [Point(i) for i in
                                [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [], [], [], [], [], [], [], [], [], [], [],
                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [], [], [], [], [], [], [], [], [], [], []]]
 

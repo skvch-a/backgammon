@@ -9,20 +9,20 @@ class NerdsTests(unittest.TestCase):
     def setUp(self):
         self.field_only_black = self.create_empty_field()
 
-        self.field_only_black.columns[0].checkers.append(0)
-        self.field_only_black.columns[2].checkers.append(0)
-        self.field_only_black.columns[3].checkers.append(1)
+        self.field_only_black.columns[0]._checkers.append(0)
+        self.field_only_black.columns[2]._checkers.append(0)
+        self.field_only_black.columns[3]._checkers.append(1)
 
-        self.field_only_black.columns[10].checkers.append(0)
-        self.field_only_black.columns[11].checkers.append(0)
-        self.field_only_black.columns[22].checkers.append(0)
-        self.field_only_black.columns[23].checkers.append(0)
+        self.field_only_black.columns[10]._checkers.append(0)
+        self.field_only_black.columns[11]._checkers.append(0)
+        self.field_only_black.columns[22]._checkers.append(0)
+        self.field_only_black.columns[23]._checkers.append(0)
 
     @staticmethod
     def create_empty_field():
         field = Field(Renderer(Game()))
         for column in field.columns:
-            column.checkers = []
+            column._checkers = []
         return field
 
     def _check_move(self, field, move, dice, expected):

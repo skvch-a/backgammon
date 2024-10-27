@@ -2,14 +2,14 @@ import pygame
 from backgammon.constants import *
 from backgammon.utils.move import Move
 from backgammon.game_objects.pike import Pike
-from backgammon.game_objects.column import Column
+from backgammon.game_objects.point import Point
 
 from backgammon.utils.help_utils import is_move_correct
 
 class Field:
     def __init__(self, renderer):
         self.renderer = renderer
-        self.columns = [Column() for _ in range(24)]
+        self.columns = [Point() for _ in range(24)]
         for i in range(CHECKERS_COUNT):
             self.columns[0].push(WHITE)
             self.columns[12].push(BLACK)
@@ -18,7 +18,7 @@ class Field:
         self.last_column = {WHITE: self.columns[23], BLACK: self.columns[11]}
         self.first_column = {WHITE: self.columns[0], BLACK: self.columns[12]}
 
-        self.houses = {WHITE: Column(), BLACK: Column()}
+        self.houses = {WHITE: Point(), BLACK: Point()}
         self.winner = NONE
         self.moves = (0, 0)
 
