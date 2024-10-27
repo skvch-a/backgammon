@@ -4,7 +4,7 @@ from backgammon.bots.smart_bot import SmartBot
 from backgammon.bots.stupid_bot import StupidBot
 from backgammon.buttons.menu_button import MenuButton
 from ..constants import HOTSEAT_BUTTON_PATH, STUPID_BOT_BUTTON_PATH, SMART_BOT_BUTTON_PATH, SCREEN_SIZE, MENU_BG_PATH
-from ..utils import get_image
+from backgammon.utils.help_utils import get_image
 
 
 class Menu:

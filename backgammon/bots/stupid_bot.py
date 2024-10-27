@@ -1,4 +1,4 @@
-from backgammon.move import Move
+from backgammon.utils.move import Move
 from backgammon.constants import BLACK
 
 class StupidBot:

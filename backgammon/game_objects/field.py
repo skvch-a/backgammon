@@ -1,10 +1,10 @@
 import pygame
 from backgammon.constants import *
-from backgammon.move import Move
+from backgammon.utils.move import Move
 from backgammon.game_objects.pike import Pike
 from backgammon.game_objects.column import Column
 
-from ..utils import is_move_correct
+from backgammon.utils.help_utils import is_move_correct
 
 class Field:
     def __init__(self, renderer):

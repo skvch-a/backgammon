@@ -1,17 +1,16 @@
 import pygame
 
 from backgammon.constants import *
-from backgammon.utils import get_image
+from backgammon.utils.help_utils import get_image
 
 
 class Renderer:
-    def __init__(self, screen):
-        self._screen = screen
-        self.dice_sprites = []
+    def __init__(self):
+        pygame.display.set_caption(TITLE)
+        self._screen = pygame.display.set_mode(SCREEN_SIZE)
         self.field_image = pygame.image.load(FIELD_PATH)
         self.font = pygame.font.SysFont("Impact", 40)
-        for i in range(1, 7):
-            self.dice_sprites.append(get_image(f"assets/images/dice_{i}.png", DICE_SIZE))
+        self.dice_sprites = self._get_dice_sprites()
 
     def draw_dices(self, dices, current_color):
         rect_width = 130
@@ -52,3 +51,20 @@ class Renderer:
 
     def draw_pike(self, pike, size):
         pike.draw(self._screen, size)
+
+    def update_controls(self, bg_color, field, dices, secret_flag, needed_color, current_color):
+        if not secret_flag:
+            self._screen.fill(bg_color)
+            field.output(dices, current_color)
+        else:
+            current_color = needed_color.get_color()
+            self._screen.fill(current_color)
+            field.output(dices, current_color)
+            needed_color.set_color(10, 5, 3)
+
+    @staticmethod
+    def _get_dice_sprites():
+        dice_sprites = []
+        for i in range(1, 7):
+            dice_sprites.append(get_image(f"assets/images/dice_{i}.png", DICE_SIZE))
+        return dice_sprites
