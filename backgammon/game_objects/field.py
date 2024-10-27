@@ -101,7 +101,7 @@ class Field:
         for i in range(24):
             pike = self.pikes[i]
             if i in selected_set:
-                pike.color = pike.selected_color
+                pike.color = PIKE_SELECTED_COLOR
             elif i in possible_moves:
                 move = Move(
                     self.selected,
@@ -109,9 +109,9 @@ class Field:
                     self.columns[self.selected].peek(),
                 )
                 if self.is_correct(move):
-                    pike.color = pike.possible_move_color
+                    pike.color = PIKE_POSSIBLE_MOVE_COLOR
             else:
-                pike.color = pike.default_color
+                pike.color = PIKE_DEFAULT_COLOR
 
     def fill_positions(self):
         first_position = (FIELD_POS[0] + 666, FIELD_POS[1] + 42)
