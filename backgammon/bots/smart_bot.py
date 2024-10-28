@@ -21,7 +21,7 @@ class SmartBot(Bot):
         for i in what_move:
             random.shuffle(diapason)
             for col in diapason:
-                if field.columns[col].peek() == self._color:
+                if field.points[col].peek() == self._color:
                     move = None
                     if (i == 0 or i == 1) and dices[i] != -1:
                         move = Move(col, col + dices[i], self._color)

@@ -10,19 +10,19 @@ class NerdsTests(unittest.TestCase):
         pygame.init()
         self.field_only_black = self.create_empty_field()
 
-        self.field_only_black.columns[0]._checkers.append(0)
-        self.field_only_black.columns[2]._checkers.append(0)
-        self.field_only_black.columns[3]._checkers.append(1)
+        self.field_only_black.points[0]._checkers.append(0)
+        self.field_only_black.points[2]._checkers.append(0)
+        self.field_only_black.points[3]._checkers.append(1)
 
-        self.field_only_black.columns[10]._checkers.append(0)
-        self.field_only_black.columns[11]._checkers.append(0)
-        self.field_only_black.columns[22]._checkers.append(0)
-        self.field_only_black.columns[23]._checkers.append(0)
+        self.field_only_black.points[10]._checkers.append(0)
+        self.field_only_black.points[11]._checkers.append(0)
+        self.field_only_black.points[22]._checkers.append(0)
+        self.field_only_black.points[23]._checkers.append(0)
 
     @staticmethod
     def create_empty_field():
         field = Field(Renderer())
-        for column in field.columns:
+        for column in field.points:
             column._checkers = []
         return field
 
@@ -63,7 +63,7 @@ class NerdsTests(unittest.TestCase):
 
     def test_is_there_legal_move(self):
         field = self.create_empty_field()
-        columns = field.columns
+        columns = field.points
         columns[0].push(WHITE)
         columns[1].push(BLACK)
         columns[2].push(BLACK)
@@ -73,7 +73,7 @@ class NerdsTests(unittest.TestCase):
 
     def test_is_there_legal_move_sum_of_moves_is_legal(self):
         field = self.create_empty_field()
-        columns = field.columns
+        columns = field.points
         columns[0].push(WHITE)
         columns[1].push(BLACK)
         columns[2].push(BLACK)
@@ -82,20 +82,20 @@ class NerdsTests(unittest.TestCase):
 
     def test_is_there_legal_move_step_out(self):
         field = self.create_empty_field()
-        columns = field.columns
+        columns = field.points
         columns[11].push(BLACK)
         dices = [2, 2]
         self.assertFalse(field.has_legal_move(dices, BLACK))
 
         field = self.create_empty_field()
-        columns = field.columns
+        columns = field.points
         columns[10].push(BLACK)
         dices = [2, 2]
         self.assertFalse(field.has_legal_move(dices, BLACK))
 
     def test_is_there_legal_can_endgame(self):
         field = self.create_empty_field()
-        columns = field.columns
+        columns = field.points
         for i in range(12):
             columns[11].push(BLACK)
         dices = [random.randint(1, 6), random.randint(1, 6)]
@@ -103,14 +103,14 @@ class NerdsTests(unittest.TestCase):
 
     def test_can_endgame_house_is_empty(self):
         field = self.create_empty_field()
-        columns = field.columns
+        columns = field.points
         for i in range(12):
             columns[11].push(BLACK)
 
         self.assertTrue(field.can_endgame(BLACK))
 
         field = self.create_empty_field()
-        columns = field.columns
+        columns = field.points
         for i in range(11):
             columns[11].push(BLACK)
 
@@ -118,7 +118,7 @@ class NerdsTests(unittest.TestCase):
 
     def test_can_endgame_house_is_not_empty(self):
         field = self.create_empty_field()
-        columns = field.columns
+        columns = field.points
         for i in range(11):
             columns[11].push(BLACK)
         field.houses[BLACK].push(BLACK)
@@ -126,7 +126,7 @@ class NerdsTests(unittest.TestCase):
         self.assertTrue(field.can_endgame(BLACK))
 
         field = self.create_empty_field()
-        columns = field.columns
+        columns = field.points
         for i in range(10):
             columns[11].push(BLACK)
         field.houses[BLACK].push(BLACK)
@@ -155,7 +155,7 @@ class NerdsTests(unittest.TestCase):
         field = self.create_empty_field()
         bot = StupidBot(BLACK)
 
-        columns = field.columns
+        columns = field.points
 
         columns[0].push(BLACK)
         columns[1].push(WHITE)
@@ -172,7 +172,7 @@ class NerdsTests(unittest.TestCase):
         field = self.create_empty_field()
         bot = StupidBot(WHITE)
 
-        columns = field.columns
+        columns = field.points
 
         columns[0].push(WHITE)
         columns[1].push(WHITE)

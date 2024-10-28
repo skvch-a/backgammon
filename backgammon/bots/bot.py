@@ -16,5 +16,5 @@ class Bot(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def get_moves(self, field: Field, dices: list[int, int]) -> list[Move]:
+    def get_moves(self, field: Field, dices: list) -> list[Move]:
         pass

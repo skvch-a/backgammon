@@ -1,23 +1,24 @@
-import pygame
-from backgammon.constants import *
-from backgammon.utils.move import Move
-from backgammon.game_core.renderer import Renderer
-from backgammon.game_objects.pike import Pike
-from backgammon.game_objects.point import Point
+from ..constants import WHITE, BLACK, NONE, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
+    PIKE_DEFAULT_COLOR, FIELD_POS
 
-from backgammon.utils.help_utils import is_move_correct
+from ..game_core.renderer import Renderer
+from ..game_objects.pike import Pike
+from ..game_objects.point import Point
+from ..utils.help_utils import is_move_correct
+from ..utils.move import Move
+
 
 class Field:
     def __init__(self, renderer: Renderer):
         self.renderer = renderer
-        self.columns = [Point() for _ in range(24)]
+        self.points = [Point() for _ in range(24)]
         for i in range(CHECKERS_COUNT):
-            self.columns[0].push(WHITE)
-            self.columns[12].push(BLACK)
-        self.last_column_index = {WHITE: 23, BLACK: 11}
-        self.first_column_index = {WHITE: 0, BLACK: 12}
-        self.last_column = {WHITE: self.columns[23], BLACK: self.columns[11]}
-        self.first_column = {WHITE: self.columns[0], BLACK: self.columns[12]}
+            self.points[0].push(WHITE)
+            self.points[12].push(BLACK)
+        self.last_point_index = {WHITE: 23, BLACK: 11}
+        self.first_point_index = {WHITE: 0, BLACK: 12}
+        self.last_point = {WHITE: self.points[23], BLACK: self.points[11]}
+        self.first_point = {WHITE: self.points[0], BLACK: self.points[12]}
 
         self.houses = {WHITE: Point(), BLACK: Point()}
         self.winner = NONE
@@ -27,8 +28,6 @@ class Field:
         self.selected_end = -1
 
         self.warned_column = -1
-        self.white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
-        self.black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
         self.positions = []
         self.position_down = []
         self.fill_positions()
@@ -65,31 +64,22 @@ class Field:
                 selected_set.add(i)
                 for j in dices:
                     if not is_move_correct(
-                            i, (i + j) % 24, self.columns[selected].peek()
+                            i, (i + j) % 24, self.points[selected].peek()
                     ):
                         continue
                     possible_moves.add((i + j) % 24)
                 if is_move_correct(
-                        i, (i + sum(dices)) % 24, self.columns[selected].peek()
+                        i, (i + sum(dices)) % 24, self.points[selected].peek()
                 ):
                     possible_moves.add((i + sum(dices)) % 24)
 
-            if i % 6 == 2 or i % 6 == 3:
-                self.renderer.draw_pike(self.pikes[i])
-            elif i % 6 == 1 or i % 6 == 4:
-                self.renderer.draw_pike(self.pikes[i])
-            else:
-                self.renderer.draw_pike(self.pikes[i])
+            self.renderer.draw_pike(self.pikes[i])
         return possible_moves, selected_set
 
     def fill_columns(self):
-        for i in range(24):
-            column = self.columns[i]
-            for checker_number in range(column.count):
-                checker_image = self.white_checker_image
-                if column.peek() == 0:
-                    checker_image = self.black_checker_image
-                self.renderer.draw_checker(checker_image, checker_number, self.pikes[i])
+        for point, pike in zip(self.points, self.pikes):
+            for checker_number in range(point.count):
+                self.renderer.draw_checker(point.peek(), checker_number, pike)
 
     def fill_pikes(self, possible_moves, selected_set):
         for i in range(24):
@@ -100,7 +90,7 @@ class Field:
                 move = Move(
                     self.selected,
                     i,
-                    self.columns[self.selected].peek(),
+                    self.points[self.selected].peek(),
                 )
                 if self.is_move_correct(move):
                     pike.change_color(PIKE_POSSIBLE_MOVE_COLOR)
@@ -142,11 +132,11 @@ class Field:
         if not self.is_move_correct(move):
             return
 
-        a = self.columns[move.start].pop()
-        if move.start == self.last_column_index[move.color]:
+        a = self.points[move.start].pop()
+        if move.start == self.last_point_index[move.color]:
             self.houses[move.color].push(a)
         else:
-            self.columns[move.end].push(a)
+            self.points[move.end].push(a)
 
     def is_move_correct(self, move, dice=None):
         if move is None:
@@ -154,8 +144,8 @@ class Field:
         if dice is not None:
             if (move.end - move.start) % 24 != dice:
                 return False
-        start = self.columns[move.start]
-        end = self.columns[move.end]
+        start = self.points[move.start]
+        end = self.points[move.end]
 
         if start.count == 0:
             return False
@@ -163,14 +153,14 @@ class Field:
             return False
 
         if move.color == BLACK:
-            if move.start < self.last_column_index[BLACK] < move.end:
+            if move.start < self.last_point_index[BLACK] < move.end:
                 return False
         if move.color == WHITE:
             if move.start > move.end and move.start != 23:
                 return False
 
-        if (self.last_column_index[move.color] == move.start
-                and (self.last_column[move.color].count + self.houses[move.color].count) != CHECKERS_COUNT):
+        if (self.last_point_index[move.color] == move.start
+                and (self.last_point[move.color].count + self.houses[move.color].count) != CHECKERS_COUNT):
             return False
         if end.count == 0:
             return True
@@ -183,12 +173,12 @@ class Field:
         dices = dices.copy()
         dices.append(sum(dices))
         for dice in dices:
-            for i in range(len(self.columns)):
-                if self.columns[i].peek() == color:
+            for i in range(len(self.points)):
+                if self.points[i].peek() == color:
                     move = Move(i, i + dice, color)
                     if self.is_move_correct(move):
                         return True
         return False
 
     def can_endgame(self, color):
-        return self.last_column[color].count + self.houses[color].count == 12
+        return self.last_point[color].count + self.houses[color].count == 12

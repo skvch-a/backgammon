@@ -1,7 +1,7 @@
 import pygame
 
-from backgammon.buttons.button import Button
-from backgammon.utils.move import Move
+from ..buttons.button import Button
+from ..utils.move import Move
 
 class EventHandler:
     def __init__(self, game):
@@ -24,17 +24,17 @@ class EventHandler:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     for i in range(self._game.field.selected - 69, self._game.field.selected):
-                        if self._game.field.columns[i % 24].peek() == self._game.current_color:
+                        if self._game.field.points[i % 24].peek() == self._game.current_color:
                             self._game.field.selected = i % 24
                 if event.key == pygame.K_RIGHT:
                     for i in range(self._game.field.selected + 1, 69 + self._game.field.selected):
-                        if self._game.field.columns[i % 24].peek() == self._game.current_color:
+                        if self._game.field.points[i % 24].peek() == self._game.current_color:
                             self._game.field.selected = i % 24
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 x, y = pygame.mouse.get_pos()
                 selected = self._game.field.get_pike_by_coordinates(x, y)
-                target_column_color = self._game.field.columns[selected].peek()
+                target_column_color = self._game.field.points[selected].peek()
                 if event.button == 1:
                     if target_column_color == self._game.current_color:
                         self._game.field.selected = selected

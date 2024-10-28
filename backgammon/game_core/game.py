@@ -1,15 +1,18 @@
 import random
 import pygame
 
-from backgammon.bots.bot import Bot
-from backgammon.utils.color_saves import ColorsSaver
-from backgammon.game_objects.point import Point
-from backgammon.constants import *
-from backgammon.game_objects.field import Field
-from backgammon.game_core.event_handler import EventHandler
-from backgammon.game_core.menu import Menu
-from backgammon.utils.move import Move
-from backgammon.game_core.renderer import Renderer
+from ..constants import NONE, WHITE, BLACK, MUSIC_PATH
+from ..bots.bot import Bot
+
+from ..game_core.event_handler import EventHandler
+from ..game_core.menu import Menu
+from ..game_core.renderer import Renderer
+
+from ..game_objects.field import Field
+from ..game_objects.point import Point
+
+from ..utils.color_saves import ColorsSaver
+from ..utils.move import Move
 
 
 class Game:
@@ -30,9 +33,9 @@ class Game:
         self._secret_flag = False
 
         self._bot = None
-        self._field.columns = [Point(i) for i in
-                               [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [], [], [], [], [], [], [], [], [], [], [],
-                               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [], [], [], [], [], [], [], [], [], [], []]]
+        self._field.points = [Point(i) for i in
+                              [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [], [], [], [], [], [], [], [], [], [], [],
+                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [], [], [], [], [], [], [], [], [], [], []]]
 
     @property
     def current_dice(self):
@@ -65,7 +68,8 @@ class Game:
             if not self._field.has_legal_move(self._dices, self._current_color):
                 self.throw_bones()
                 self.change_color()
-                self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color, self._current_color)
+                self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color,
+                                               self._current_color)
                 self._renderer.draw_turn_text(self._current_color)
                 pygame.display.update()
                 continue
@@ -90,12 +94,14 @@ class Game:
                 self.throw_bones()
                 self._current_color = (self._current_color + 1) % 2
 
-            self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color, self._current_color)
+            self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color,
+                                           self._current_color)
             self._renderer.draw_turn_text(self._current_color)
             pygame.display.update()
 
         while True:
-            self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color, self._current_color)
+            self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color,
+                                           self._current_color)
             pygame.display.update()
 
     def throw_bones(self):
@@ -103,7 +109,7 @@ class Game:
 
     def make_move_by_mouse(self):
         if self._field.selected_end != -1:
-            last_column_index = self._field.last_column_index[self._current_color]
+            last_column_index = self._field.last_point_index[self._current_color]
             if self._field.selected_end == last_column_index:
                 if self._field.can_endgame(self._current_color):
                     move = Move(last_column_index, last_column_index + 1, self._current_color)
@@ -137,4 +143,3 @@ class Game:
             self._winner = WHITE
             pygame.time.wait(10)
             pygame.quit()
-

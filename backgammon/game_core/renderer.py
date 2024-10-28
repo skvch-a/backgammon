@@ -12,6 +12,8 @@ class Renderer:
         self._font = pygame.font.SysFont("Impact", 40)
         self._dice_sprites = self._get_dice_sprites()
         self._game_bg = get_image(GAME_BG_PATH, SCREEN_SIZE)
+        self.white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
+        self.black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
 
     def draw_dices(self, dices, current_color):
         rect_width = 130
@@ -44,8 +46,9 @@ class Renderer:
         for button in buttons:
             button.draw(self._screen)
 
-    def draw_checker(self, checker_image, checker_number, pike):
-        self._screen.blit(checker_image, pike.get_checker_position(checker_number))
+    def draw_checker(self, checker_color, checker_number, pike):
+        image = self.white_checker_image if checker_color == WHITE else self.black_checker_image
+        self._screen.blit(image, pike.get_checker_position(checker_number))
 
     def draw_game_bg(self):
         self._screen.blit(self._game_bg, (0, 0))

@@ -14,7 +14,7 @@ class StupidBot(Bot):
     def get_moves(self, field, dices):
         moves = []
         for col in range(23, -1, -1):
-            if field.columns[col].peek() == self._color:
+            if field.points[col].peek() == self._color:
                 move = Move(col, col + sum(dices), self._color)
                 if field.is_move_correct(move):
                     moves.append(move)
@@ -24,7 +24,7 @@ class StupidBot(Bot):
         while i < len(dices):
             dice = dices[i]
             for col in range(23, -1, -1):
-                if field.columns[col].peek() == self._color:
+                if field.points[col].peek() == self._color:
                     move = Move(col, col + dice, self._color)
                     if field.is_move_correct(move):
                         moves.append(move)
