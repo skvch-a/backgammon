@@ -1,6 +1,7 @@
 import random
 import pygame
 
+from backgammon.bots.bot import Bot
 from backgammon.utils.color_saves import ColorsSaver
 from backgammon.game_objects.point import Point
 from backgammon.constants import *
@@ -40,7 +41,7 @@ class Game:
     def run(self):
         pygame.mixer.music.load(MUSIC_PATH)
         pygame.mixer.music.play(-1)
-        self._bot = self._menu.choose_game_mode()
+        self._bot: Bot = self._menu.choose_game_mode()
 
         while self._winner == NONE:
             if not self._field.has_legal_move(self._dices, self._current_color):

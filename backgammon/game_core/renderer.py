@@ -11,6 +11,7 @@ class Renderer:
         self.field_image = pygame.image.load(FIELD_PATH)
         self.font = pygame.font.SysFont("Impact", 40)
         self.dice_sprites = self._get_dice_sprites()
+        self._game_bg = get_image(GAME_BG_PATH, SCREEN_SIZE)
 
     def draw_dices(self, dices, current_color):
         rect_width = 130
@@ -47,7 +48,7 @@ class Renderer:
         self._screen.blit(checker_image, pike.get_checker_position(checker_number))
 
     def draw_game_bg(self):
-        self._screen.blit(get_image('assets/images/game_bg.png', SCREEN_SIZE), (0, 0))
+        self._screen.blit(self._game_bg, (0, 0))
 
     def draw_field_bg(self):
         self._screen.blit(self.field_image, FIELD_POS)

@@ -1,15 +1,13 @@
 import random
+
+from backgammon.bots.bot import Bot
 from backgammon.utils.move import Move
 from backgammon.constants import BLACK
 
 
-class SmartBot:
+class SmartBot(Bot):
     def __init__(self, color=BLACK):
-        self._color = color
-
-    @property
-    def color(self):
-        return self._color
+        super().__init__(color)
 
     @staticmethod
     def get_name():

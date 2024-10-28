@@ -33,7 +33,6 @@ class Field:
         self.position_down = []
         self.fill_positions()
         self.pikes = []
-        self.houses_pikes = [Pike(0, 0, 1)] * 2
 
         for i, pos in enumerate(self.positions):
             self.pikes.append(Pike(pos[0], pos[1], self.get_pike_type(i)))
@@ -53,19 +52,8 @@ class Field:
         self.renderer.draw_game_bg()
         self.renderer.draw_field_bg()
         possible_moves, selected_set = self.check_selected(dices)
-
         self.fill_pikes(possible_moves, selected_set)
         self.fill_columns()
-
-        for color in range(2):
-            column = self.houses[color]
-            pike = self.houses_pikes[color]
-            checker_image = self.white_checker_image if color == WHITE else self.black_checker_image
-            self.renderer.draw_pike(pike)
-
-            for i in range(column.count):
-                self.renderer.draw_checker(checker_image, i, color)
-
         self.renderer.draw_dices(dices, current_color)
 
     def check_selected(self, dices):
