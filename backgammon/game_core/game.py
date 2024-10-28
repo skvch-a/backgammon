@@ -20,9 +20,8 @@ class Game:
         self._event_handler = EventHandler(self)
         self._field = Field(self._renderer)
         self._menu = Menu(self._event_handler, self._renderer)
-
-        self._dices = [3, 4]
         self._current_dice = -1
+        self._dices = [3, 4]
         self._winner = NONE
         self._current_color = 1
         self._last_dice = (-1, WHITE)
@@ -36,12 +35,12 @@ class Game:
                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [], [], [], [], [], [], [], [], [], [], []]]
 
     @property
-    def dices(self):
-        return self._dices
-
-    @property
     def current_dice(self):
         return self._current_dice
+
+    @property
+    def dices(self):
+        return self._dices
 
     @property
     def field(self):
@@ -50,6 +49,9 @@ class Game:
     @property
     def current_color(self):
         return self._current_color
+
+    def update_current_dice(self):
+        self._current_dice %= len(self.dices)
 
     def change_color(self):
         self._current_color = (self._current_color + 1) % 2

@@ -10,7 +10,7 @@ class EventHandler:
     def handle_game_events(self) -> None:
         events = pygame.event.get()
         self.check_for_quit(events)
-        self.select_dice(events)
+        self._game.update_current_dice()
         self.select_pike(events)
         self.make_move_by_pressing_button(events)
 
@@ -18,15 +18,6 @@ class EventHandler:
         events = pygame.event.get()
         self.check_for_quit(events)
         return self.get_pressed_button_index(events, menu_buttons)
-
-    def select_dice(self, events: list[pygame.event.Event]) -> None:
-        for event in events:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
-                    self._game._current_dice = 0
-                if event.key == pygame.K_2:
-                    self._game._current_dice = 1
-        self._game._current_dice %= len(self._game.dices)
 
     def select_pike(self, events: list[pygame.event.Event]) -> None:
         for event in events:
