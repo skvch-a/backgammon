@@ -1,16 +1,24 @@
 import pygame
 
-from backgammon.constants import PIKE_DEFAULT_COLOR, CHECKER_HALF_SIZE
+from backgammon.constants import PIKE_DEFAULT_COLOR, CHECKER_HALF_SIZE, PIKE_WIDTH, PIKE_BASE_HEIGHT
 
 
 class Pike:
-    def __init__(self, center_x, y, height, width):
+    def __init__(self, center_x, y, pike_type, reverse=False):
         self._color = PIKE_DEFAULT_COLOR
         self._center_x = center_x
-        self._x = center_x - width / 2
+        self._x = center_x - PIKE_WIDTH / 2
         self._y = y
-        self._height = height
-        self._width = width
+        self._height = -1 * PIKE_BASE_HEIGHT if reverse else PIKE_BASE_HEIGHT
+        self._render_height = self._height / pike_type
+
+    @property
+    def vertices(self):
+        return (self._x, self._y), (self._x + PIKE_WIDTH, self._y), (self._center_x, self._y + self._render_height)
+
+    @property
+    def color(self):
+        return self._color
 
     def get_checker_position(self, checker_number):
         return self._center_x - CHECKER_HALF_SIZE, self._y + self._height / 15 * checker_number - CHECKER_HALF_SIZE
@@ -18,20 +26,9 @@ class Pike:
     def change_color(self, color):
         self._color = color
 
-    def draw(self, screen, size):
-        pygame.draw.polygon(
-            screen,
-            self._color,
-            [
-                [self._x, self._y],
-                [self._x + self._width, self._y],
-                [self._center_x, self._y + self._height / size],
-            ],
-        )
-
     def is_inside(self, x, y):
         x1 = self._x
-        x2 = self._x + self._width
+        x2 = self._x + PIKE_WIDTH
         x3 = self._center_x
         y1 = self._y
         y2 = self._y

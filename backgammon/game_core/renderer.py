@@ -52,8 +52,8 @@ class Renderer:
     def draw_field_bg(self):
         self._screen.blit(self.field_image, FIELD_POS)
 
-    def draw_pike(self, pike, size):
-        pike.draw(self._screen, size)
+    def draw_pike(self, pike):
+        pygame.draw.polygon(self._screen, pike.color, pike.vertices)
 
     def update_controls(self, bg_color, field, dices, secret_flag, needed_color, current_color):
         if not secret_flag:

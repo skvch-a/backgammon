@@ -33,12 +33,21 @@ class Field:
         self.position_down = []
         self.fill_positions()
         self.pikes = []
-        self.houses_pikes = [Pike(0, 0, 0, 0)] * 2
-        for pos in self.positions:
-            self.pikes.append(Pike(pos[0], pos[1], 190, 27))
-        for pos_down in self.position_down:
-            self.pikes.append(Pike(pos_down[0], pos_down[1], -190, 27))
+        self.houses_pikes = [Pike(0, 0, 1)] * 2
 
+        for i, pos in enumerate(self.positions):
+            self.pikes.append(Pike(pos[0], pos[1], self.get_pike_type(i)))
+        for i, pos in enumerate(self.position_down):
+            self.pikes.append(Pike(pos[0], pos[1], self.get_pike_type(i), True))
+
+    @staticmethod
+    def get_pike_type(pike_index):
+        pike_type = 1
+        if pike_index % 6 == 1 or pike_index % 6 == 4:
+            pike_type = 2
+        elif pike_index % 6 == 2 or pike_index % 6 == 3:
+            pike_type = 3
+        return pike_type
 
     def output(self, dices, current_color):
         self.renderer.draw_game_bg()
@@ -52,7 +61,7 @@ class Field:
             column = self.houses[color]
             pike = self.houses_pikes[color]
             checker_image = self.white_checker_image if color == WHITE else self.black_checker_image
-            self.renderer.draw_pike(pike, 1)
+            self.renderer.draw_pike(pike)
 
             for i in range(column.count):
                 self.renderer.draw_checker(checker_image, i, color)
@@ -78,11 +87,11 @@ class Field:
                     possible_moves.add((i + sum(dices)) % 24)
 
             if i % 6 == 2 or i % 6 == 3:
-                self.renderer.draw_pike(self.pikes[i],3)
+                self.renderer.draw_pike(self.pikes[i])
             elif i % 6 == 1 or i % 6 == 4:
-                self.renderer.draw_pike(self.pikes[i],2)
+                self.renderer.draw_pike(self.pikes[i])
             else:
-                self.renderer.draw_pike(self.pikes[i],1)
+                self.renderer.draw_pike(self.pikes[i])
         return possible_moves, selected_set
 
     def fill_columns(self):
