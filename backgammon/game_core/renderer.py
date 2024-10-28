@@ -30,7 +30,7 @@ class Renderer:
             indent += 1
 
     def draw_text(self, text, pos):
-        self._screen.blit(self.font.render(text, True, (81, 179, 41), BG_COLOR), pos)
+        self._screen.blit(self.font.render(text, True, (81, 179, 41)), pos)
 
     def draw_turn_text(self, current_color):
         colors = ("Black", "White")
@@ -43,8 +43,11 @@ class Renderer:
         for button in buttons:
             button.draw(self._screen)
 
-    def draw_checker(self, x, y, sprite):
-        self._screen.blit(sprite, (x - 13.5, y - 13.5))
+    def draw_checker(self, checker_image, checker_number, pike):
+        self._screen.blit(checker_image, pike.get_checker_position(checker_number))
+
+    def draw_game_bg(self):
+        self._screen.blit(get_image('assets/images/game_bg.png', SCREEN_SIZE), (0, 0))
 
     def draw_field_bg(self):
         self._screen.blit(self.field_image, FIELD_POS)

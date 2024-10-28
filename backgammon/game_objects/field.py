@@ -1,13 +1,14 @@
 import pygame
 from backgammon.constants import *
 from backgammon.utils.move import Move
+from backgammon.game_core.renderer import Renderer
 from backgammon.game_objects.pike import Pike
 from backgammon.game_objects.point import Point
 
 from backgammon.utils.help_utils import is_move_correct
 
 class Field:
-    def __init__(self, renderer):
+    def __init__(self, renderer: Renderer):
         self.renderer = renderer
         self.columns = [Point() for _ in range(24)]
         for i in range(CHECKERS_COUNT):
@@ -26,8 +27,8 @@ class Field:
         self.selected_end = -1
 
         self.warned_column = -1
-        self.white_sprite = pygame.image.load(CHECKER_WHITE_PATH)
-        self.black_sprite = pygame.image.load(CHECKER_BLACK_PATH)
+        self.white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
+        self.black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
         self.positions = []
         self.position_down = []
         self.fill_positions()
@@ -40,6 +41,7 @@ class Field:
 
 
     def output(self, dices, current_color):
+        self.renderer.draw_game_bg()
         self.renderer.draw_field_bg()
         possible_moves, selected_set = self.check_selected(dices)
 
@@ -49,11 +51,11 @@ class Field:
         for color in range(2):
             column = self.houses[color]
             pike = self.houses_pikes[color]
-            sprite = self.white_sprite if color == WHITE else self.black_sprite
+            checker_image = self.white_checker_image if color == WHITE else self.black_checker_image
             self.renderer.draw_pike(pike, 1)
 
             for i in range(column.count):
-                self.renderer.draw_checker(pike.center_x, pike.y + pike.height / 15 * i, sprite)
+                self.renderer.draw_checker(checker_image, i, color)
 
         self.renderer.draw_dices(dices, current_color)
 
@@ -85,33 +87,28 @@ class Field:
 
     def fill_columns(self):
         for i in range(24):
-            pikes_coordinate = (self.pikes[i].center_x, self.pikes[i].y)
             column = self.columns[i]
-            for j in range(column.count):
-                sprite = self.white_sprite
+            for checker_number in range(column.count):
+                checker_image = self.white_checker_image
                 if column.peek() == 0:
-                    sprite = self.black_sprite
-                self.renderer.draw_checker(
-                    pikes_coordinate[0],
-                    pikes_coordinate[1] + self.pikes[i].height / 15 * j,
-                    sprite,
-                )
+                    checker_image = self.black_checker_image
+                self.renderer.draw_checker(checker_image, checker_number, self.pikes[i])
 
     def fill_pikes(self, possible_moves, selected_set):
         for i in range(24):
             pike = self.pikes[i]
             if i in selected_set:
-                pike.color = PIKE_SELECTED_COLOR
+                pike.change_color(PIKE_SELECTED_COLOR)
             elif i in possible_moves:
                 move = Move(
                     self.selected,
                     i,
                     self.columns[self.selected].peek(),
                 )
-                if self.is_correct(move):
-                    pike.color = PIKE_POSSIBLE_MOVE_COLOR
+                if self.is_move_correct(move):
+                    pike.change_color(PIKE_POSSIBLE_MOVE_COLOR)
             else:
-                pike.color = PIKE_DEFAULT_COLOR
+                pike.change_color(PIKE_DEFAULT_COLOR)
 
     def fill_positions(self):
         first_position = (FIELD_POS[0] + 666, FIELD_POS[1] + 42)
@@ -145,7 +142,7 @@ class Field:
         return -1
 
     def make_move(self, move):
-        if not self.is_correct(move):
+        if not self.is_move_correct(move):
             return
 
         a = self.columns[move.start].pop()
@@ -154,7 +151,7 @@ class Field:
         else:
             self.columns[move.end].push(a)
 
-    def is_correct(self, move, dice=None):
+    def is_move_correct(self, move, dice=None):
         if move is None:
             return False
         if dice is not None:
@@ -192,7 +189,7 @@ class Field:
             for i in range(len(self.columns)):
                 if self.columns[i].peek() == color:
                     move = Move(i, i + dice, color)
-                    if self.is_correct(move):
+                    if self.is_move_correct(move):
                         return True
         return False
 

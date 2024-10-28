@@ -7,6 +7,7 @@ from backgammon.game_core.game import *
 
 class NerdsTests(unittest.TestCase):
     def setUp(self):
+        pygame.init()
         self.field_only_black = self.create_empty_field()
 
         self.field_only_black.columns[0]._checkers.append(0)
@@ -20,13 +21,13 @@ class NerdsTests(unittest.TestCase):
 
     @staticmethod
     def create_empty_field():
-        field = Field(Renderer(Game()))
+        field = Field(Renderer())
         for column in field.columns:
             column._checkers = []
         return field
 
     def _check_move(self, field, move, dice, expected):
-        actual = field.is_correct(move, dice)
+        actual = field.is_move_correct(move, dice)
         self.assertEqual(expected, actual)
 
     def test_correct_move(self):
@@ -57,7 +58,7 @@ class NerdsTests(unittest.TestCase):
         x = 111
         y = 124
 
-        field = Field(Renderer(Game()))
+        field = Field(Renderer())
         self.assertTrue(field.pikes[11].is_inside(x, y))
 
     def test_is_there_legal_move(self):
@@ -133,7 +134,7 @@ class NerdsTests(unittest.TestCase):
         self.assertFalse(field.can_endgame(BLACK))
 
     def test_bot_gives_legal_moves(self):
-        field = Field(Renderer(Game()))
+        field = Field(Renderer())
         bot_white = StupidBot(WHITE)
         bot_black = SmartBot(BLACK)
 
@@ -141,13 +142,13 @@ class NerdsTests(unittest.TestCase):
             dices = [1, 3]
             moves = bot_white.get_moves(field, dices)
             for move in moves:
-                self.assertTrue(field.is_correct(move))
+                self.assertTrue(field.is_move_correct(move))
                 field.make_move(move)
 
             dices = [1, 2]
             moves = bot_black.get_moves(field, dices)
             for move in moves:
-                self.assertTrue(field.is_correct(move))
+                self.assertTrue(field.is_move_correct(move))
                 field.make_move(move)
 
     def test_bot_does_not_give_moves_if_no_legal(self):

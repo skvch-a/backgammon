@@ -5,7 +5,11 @@ from backgammon.constants import BLACK
 
 class SmartBot:
     def __init__(self, color=BLACK):
-        self.color = color
+        self._color = color
+
+    @property
+    def color(self):
+        return self._color
 
     @staticmethod
     def get_name():
@@ -19,13 +23,13 @@ class SmartBot:
         for i in what_move:
             random.shuffle(diapason)
             for col in diapason:
-                if field.columns[col].peek() == self.color:
+                if field.columns[col].peek() == self._color:
                     move = None
                     if (i == 0 or i == 1) and dices[i] != -1:
-                        move = Move(col, col + dices[i], self.color)
+                        move = Move(col, col + dices[i], self._color)
                     elif dices[0] != -1 and dices[1] != -1:
-                        move = Move(col, col + sum(dices), self.color)
-                    if field.is_correct(move):
+                        move = Move(col, col + sum(dices), self._color)
+                    if field.is_move_correct(move):
                         moves.append(move)
                         field.make_move(move)
                         if i == 0 or i == 1:

@@ -58,7 +58,7 @@ class EventHandler:
         for event in events:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_q:
-                    if self._game._field.is_correct(move):
+                    if self._game._field.is_move_correct(move):
                         self._game._field.make_move(move)
                         self._game._dices.pop(self._game._current_dice)
 

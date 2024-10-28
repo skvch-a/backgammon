@@ -3,7 +3,11 @@ from backgammon.constants import BLACK
 
 class StupidBot:
     def __init__(self, color=BLACK):
-        self.color = color
+        self._color = color
+
+    @property
+    def color(self):
+        return self._color
 
     @staticmethod
     def get_name():
@@ -12,9 +16,9 @@ class StupidBot:
     def get_moves(self, field, dices):
         moves = []
         for col in range(23, -1, -1):
-            if field.columns[col].peek() == self.color:
-                move = Move(col, col + sum(dices), self.color)
-                if field.is_correct(move):
+            if field.columns[col].peek() == self._color:
+                move = Move(col, col + sum(dices), self._color)
+                if field.is_move_correct(move):
                     moves.append(move)
                     dices.clear()
 
@@ -22,9 +26,9 @@ class StupidBot:
         while i < len(dices):
             dice = dices[i]
             for col in range(23, -1, -1):
-                if field.columns[col].peek() == self.color:
-                    move = Move(col, col + dice, self.color)
-                    if field.is_correct(move):
+                if field.columns[col].peek() == self._color:
+                    move = Move(col, col + dice, self._color)
+                    if field.is_move_correct(move):
                         moves.append(move)
                         dices.remove(dice)
                         i = 0

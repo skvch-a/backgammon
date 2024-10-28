@@ -98,14 +98,14 @@ class Game:
 
             if (self._field.selected_end - self._field.selected) % 24 in self._dices:
                 move = Move(self._field.selected, self._field.selected_end, self._current_color)
-                if self._field.is_correct(move):
+                if self._field.is_move_correct(move):
                     self._field.make_move(move)
                     self._dices.remove((self._field.selected_end - self._field.selected) % 24)
                     self._field.selected = -1
 
             elif (self._field.selected_end - self._field.selected) % 24 == sum(self._dices):
                 move = Move(self._field.selected, self._field.selected_end, self._current_color)
-                if self._field.is_correct(move):
+                if self._field.is_move_correct(move):
                     self._field.make_move(move)
                     self._dices = []
                     self._field.selected = -1

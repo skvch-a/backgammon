@@ -1,5 +1,5 @@
 from pygame import transform, image
-from constants import WHITE, BLACK
+from backgammon.constants import WHITE, BLACK
 
 
 def get_image(path, size):
