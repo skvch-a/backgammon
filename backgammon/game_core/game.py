@@ -35,6 +35,22 @@ class Game:
                                [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [], [], [], [], [], [], [], [], [], [], [],
                                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [], [], [], [], [], [], [], [], [], [], []]]
 
+    @property
+    def dices(self):
+        return self._dices
+
+    @property
+    def current_dice(self):
+        return self._current_dice
+
+    @property
+    def field(self):
+        return self._field
+
+    @property
+    def current_color(self):
+        return self._current_color
+
     def change_color(self):
         self._current_color = (self._current_color + 1) % 2
 
@@ -47,9 +63,7 @@ class Game:
             if not self._field.has_legal_move(self._dices, self._current_color):
                 self.throw_bones()
                 self.change_color()
-                self._renderer.update_controls(
-                    BG_COLOR, self._field, self._dices, self._secret_flag, self._needed_color, self._current_color
-                )
+                self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color, self._current_color)
                 self._renderer.draw_turn_text(self._current_color)
                 pygame.display.update()
                 continue
@@ -74,12 +88,12 @@ class Game:
                 self.throw_bones()
                 self._current_color = (self._current_color + 1) % 2
 
-            self._renderer.update_controls(BG_COLOR, self._field, self._dices, self._secret_flag, self._needed_color, self._current_color)
+            self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color, self._current_color)
             self._renderer.draw_turn_text(self._current_color)
             pygame.display.update()
 
         while True:
-            self._renderer.update_controls(BG_COLOR, self._field, self._dices, self._secret_flag, self._needed_color, self._current_color)
+            self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color, self._current_color)
             pygame.display.update()
 
     def throw_bones(self):

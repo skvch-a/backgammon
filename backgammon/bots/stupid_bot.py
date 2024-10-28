@@ -1,7 +1,7 @@
 from backgammon.bots.bot import Bot
 from backgammon.utils.move import Move
 from backgammon.constants import BLACK
-
+from backgammon.game_objects.field import Field
 
 class StupidBot(Bot):
     def __init__(self, color=BLACK):

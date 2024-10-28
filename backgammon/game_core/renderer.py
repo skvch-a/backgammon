@@ -8,9 +8,9 @@ class Renderer:
     def __init__(self):
         pygame.display.set_caption(TITLE)
         self._screen = pygame.display.set_mode(SCREEN_SIZE)
-        self.field_image = pygame.image.load(FIELD_PATH)
-        self.font = pygame.font.SysFont("Impact", 40)
-        self.dice_sprites = self._get_dice_sprites()
+        self._field_image = pygame.image.load(FIELD_PATH)
+        self._font = pygame.font.SysFont("Impact", 40)
+        self._dice_sprites = self._get_dice_sprites()
         self._game_bg = get_image(GAME_BG_PATH, SCREEN_SIZE)
 
     def draw_dices(self, dices, current_color):
@@ -27,11 +27,11 @@ class Renderer:
 
         indent = 0
         for dice_index in dices:
-            self._screen.blit(self.dice_sprites[dice_index - 1], (rect_x + indent * 60 + 10, rect_y + 10))
+            self._screen.blit(self._dice_sprites[dice_index - 1], (rect_x + indent * 60 + 10, rect_y + 10))
             indent += 1
 
     def draw_text(self, text, pos):
-        self._screen.blit(self.font.render(text, True, (81, 179, 41)), pos)
+        self._screen.blit(self._font.render(text, True, (81, 179, 41)), pos)
 
     def draw_turn_text(self, current_color):
         colors = ("Black", "White")
@@ -51,18 +51,17 @@ class Renderer:
         self._screen.blit(self._game_bg, (0, 0))
 
     def draw_field_bg(self):
-        self._screen.blit(self.field_image, FIELD_POS)
+        self._screen.blit(self._field_image, FIELD_POS)
 
     def draw_pike(self, pike):
         pygame.draw.polygon(self._screen, pike.color, pike.vertices)
 
-    def update_controls(self, bg_color, field, dices, secret_flag, needed_color, current_color):
+    @staticmethod
+    def update_controls(field, dices, secret_flag, needed_color, current_color):
         if not secret_flag:
-            self._screen.fill(bg_color)
             field.output(dices, current_color)
         else:
             current_color = needed_color.get_color()
-            self._screen.fill(current_color)
             field.output(dices, current_color)
             needed_color.set_color(10, 5, 3)
 
