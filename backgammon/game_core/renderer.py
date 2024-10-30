@@ -57,12 +57,23 @@ class Renderer:
     def draw_pike(self, pike):
         pygame.draw.polygon(self._screen, pike.color, pike.vertices)
 
+    def draw_pikes(self, pikes):
+        for pike in pikes:
+            self.draw_pike(pike)
+
+    def draw_field(self, field, dices, current_color):
+        self.draw_game_bg()
+        self.draw_field_bg()
+        field.output(dices)
+        self.draw_pikes(field.pikes)
+        field.fill_columns()
+        self.draw_dices(dices, current_color)
+
     def update_controls(self, field, dices, secret_flag, needed_color, current_color):
         if not secret_flag:
-            field.output(dices, current_color)
+            self.draw_field(field, dices, current_color)
         else:
-            current_color = needed_color.get_color()
-            field.output(dices, current_color)
+            self.draw_field(field, dices, current_color)
             needed_color.set_color(10, 5, 3)
 
         self.draw_turn_text(current_color)

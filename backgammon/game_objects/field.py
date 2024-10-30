@@ -54,15 +54,10 @@ class Field:
             pike_type = 3
         return pike_type
 
-    def output(self, dices, current_color):
-        self.renderer.draw_game_bg()
-        self.renderer.draw_field_bg()
-
+    def output(self, dices):
         possible_moves, selected_set = self.check_selected(dices)
-
         self.fill_pikes(possible_moves, selected_set)
-        self.fill_columns()
-        self.renderer.draw_dices(dices, current_color)
+
 
     def check_selected(self, dices):
         selected_set = set()
@@ -78,7 +73,7 @@ class Field:
                 if is_move_correct(i, (i + sum(dices)) % 24, self.points[selected].peek()):
                     possible_moves.add((i + sum(dices)) % 24)
 
-            self.renderer.draw_pike(self.pikes[i])
+
         return possible_moves, selected_set
 
     def fill_columns(self):
