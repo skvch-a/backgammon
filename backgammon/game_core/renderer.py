@@ -1,8 +1,5 @@
-import sys
-
 import pygame
 
-from backgammon.buttons.button import Button
 from backgammon.constants import *
 from backgammon.utils.help_utils import get_image, get_dices_box_rect
 
