@@ -1,7 +1,7 @@
 import pygame
 
 from backgammon.constants import *
-from backgammon.utils.help_utils import get_image
+from backgammon.utils.help_utils import get_image, get_dices_rect
 
 
 class Renderer:
@@ -12,24 +12,22 @@ class Renderer:
         self._font = pygame.font.SysFont("Impact", 40)
         self._dice_sprites = self._get_dice_sprites()
         self._game_bg = get_image(GAME_BG_PATH, SCREEN_SIZE)
+
         self.white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
         self.black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
 
     def draw_dices(self, dices, current_color):
-        rect_width = 130
-        rect_height = 70
-        rect_x = FIELD_POS[0] + 310
-        rect_y = FIELD_POS[1] - 100
+        rect = get_dices_rect()
 
         if current_color == WHITE:
             rect_color = (255, 255, 255)
         else:
             rect_color = (0, 0, 0)
-        pygame.draw.rect(self._screen, rect_color, (rect_x, rect_y, rect_width, rect_height))
+        pygame.draw.rect(self._screen, rect_color, rect)
 
         indent = 0
         for dice_index in dices:
-            self._screen.blit(self._dice_sprites[dice_index - 1], (rect_x + indent * 60 + 10, rect_y + 10))
+            self._screen.blit(self._dice_sprites[dice_index - 1], (rect.x + indent * 60 + 10, rect.y + 10))
             indent += 1
 
     def draw_text(self, text, pos):
