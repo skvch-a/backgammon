@@ -48,6 +48,11 @@ class Renderer:
         image = self._white_checker_image if checker_color == WHITE else self._black_checker_image
         self._screen.blit(image, pike.get_checker_position(checker_number))
 
+    def draw_checkers(self, points, pikes):
+        for point, pike in zip(points, pikes):
+            for checker_number in range(point.count):
+                self.draw_checker(point.peek(), checker_number, pike)
+
     def draw_game_bg(self):
         self._screen.blit(self._game_bg, (0, 0))
 

@@ -61,7 +61,7 @@ class Field:
         possible_moves, selected_set = self.check_selected(dices)
 
         self.fill_pikes(possible_moves, selected_set)
-        self.fill_columns()
+        self.renderer.draw_checkers(self.points, self.pikes)
         self.renderer.draw_dices(dices, current_color)
 
     def check_selected(self, dices):
@@ -84,11 +84,6 @@ class Field:
 
             self.renderer.draw_pike(self.pikes[i])
         return possible_moves, selected_set
-
-    def fill_columns(self):
-        for point, pike in zip(self.points, self.pikes):
-            for checker_number in range(point.count):
-                self.renderer.draw_checker(point.peek(), checker_number, pike)
 
     def fill_pikes(self, possible_moves, selected_set):
         for i in range(24):
