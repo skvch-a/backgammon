@@ -20,6 +20,12 @@ class Renderer:
         self._white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
         self._black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
 
+    def draw_field(self, points, pikes, dices, current_color):
+        self.draw_game_bg()
+        self.draw_field_bg()
+        self.draw_checkers(points, pikes)
+        self.draw_dices(dices, current_color)
+
     def draw_dices(self, dices, current_color):
         rect = self._dices_box_rect
         rect_color = (255, 255, 255) if current_color == WHITE else (0, 0, 0)
@@ -64,10 +70,10 @@ class Renderer:
 
     def update_controls(self, field, dices, secret_flag, needed_color, current_color):
         if not secret_flag:
-            field.output(dices, current_color)
+            field.update(dices, current_color)
         else:
             current_color = needed_color.get_color()
-            field.output(dices, current_color)
+            field.update(dices, current_color)
             needed_color.set_color(10, 5, 3)
 
         self.draw_turn_text(current_color)

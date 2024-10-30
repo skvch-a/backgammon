@@ -121,7 +121,7 @@ class NerdsTests(unittest.TestCase):
         columns = field.points
         for i in range(11):
             columns[11].push(BLACK)
-        field.houses[BLACK].push(BLACK)
+        field.finish[BLACK].push(BLACK)
 
         self.assertTrue(field.can_endgame(BLACK))
 
@@ -129,7 +129,7 @@ class NerdsTests(unittest.TestCase):
         columns = field.points
         for i in range(10):
             columns[11].push(BLACK)
-        field.houses[BLACK].push(BLACK)
+        field.finish[BLACK].push(BLACK)
 
         self.assertFalse(field.can_endgame(BLACK))
 

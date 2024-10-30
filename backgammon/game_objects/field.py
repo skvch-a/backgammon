@@ -1,17 +1,12 @@
-import pygame
-
-
 from ..constants import WHITE, BLACK, NONE, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
     PIKE_DEFAULT_COLOR, FIELD_POS, THROW_DICES_BUTTON_PATH
-from ..game_core.event_handler import EventHandler
-
 from ..game_core.renderer import Renderer
 from ..game_objects.pike import Pike
 from ..game_objects.point import Point
+from ..utils.help_utils import get_dices_box_rect
 from ..utils.help_utils import is_move_correct
 from ..utils.move import Move
 from ..buttons.button import Button
-from ..utils.help_utils import get_dices_box_rect
 
 
 class Field:
@@ -26,7 +21,7 @@ class Field:
         self.last_point = {WHITE: self.points[23], BLACK: self.points[11]}
         self.first_point = {WHITE: self.points[0], BLACK: self.points[12]}
 
-        self.houses = {WHITE: Point(), BLACK: Point()}
+        self.finish = {WHITE: Point(), BLACK: Point()}
         self.winner = NONE
         self.moves = (0, 0)
         self._throw_dices_button = Button(get_dices_box_rect(), THROW_DICES_BUTTON_PATH)
@@ -54,15 +49,10 @@ class Field:
             pike_type = 3
         return pike_type
 
-    def output(self, dices, current_color):
-        self.renderer.draw_game_bg()
-        self.renderer.draw_field_bg()
-
+    def update(self, dices, current_color):
         possible_moves, selected_set = self.check_selected(dices)
-
-        self.fill_pikes(possible_moves, selected_set)
-        self.renderer.draw_checkers(self.points, self.pikes)
-        self.renderer.draw_dices(dices, current_color)
+        self.recolor_pikes(possible_moves, selected_set)
+        self.renderer.draw_field(self.points, self.pikes, dices, current_color)
 
     def check_selected(self, dices):
         selected_set = set()
@@ -72,31 +62,22 @@ class Field:
             if selected == i:
                 selected_set.add(i)
                 for j in dices:
-                    if not is_move_correct(
-                            i, (i + j) % 24, self.points[selected].peek()
-                    ):
+                    if not is_move_correct(i, (i + j) % 24, self.points[selected].peek()):
                         continue
                     possible_moves.add((i + j) % 24)
-                if is_move_correct(
-                        i, (i + sum(dices)) % 24, self.points[selected].peek()
-                ):
+                if is_move_correct(i, (i + sum(dices)) % 24, self.points[selected].peek()):
                     possible_moves.add((i + sum(dices)) % 24)
 
             self.renderer.draw_pike(self.pikes[i])
         return possible_moves, selected_set
 
-    def fill_pikes(self, possible_moves, selected_set):
+    def recolor_pikes(self, possible_moves, selected_set):
         for i in range(24):
             pike = self.pikes[i]
             if i in selected_set:
                 pike.change_color(PIKE_SELECTED_COLOR)
             elif i in possible_moves:
-                move = Move(
-                    self.selected,
-                    i,
-                    self.points[self.selected].peek(),
-                )
-                if self.is_move_correct(move):
+                if self.is_move_correct(Move(self.selected, i, self.points[self.selected].peek())):
                     pike.change_color(PIKE_POSSIBLE_MOVE_COLOR)
             else:
                 pike.change_color(PIKE_DEFAULT_COLOR)
@@ -106,25 +87,17 @@ class Field:
         self.positions.append(first_position)
         for i in range(1, 12):
             if i == 6:
-                self.positions.append(
-                    (self.positions[i - 1][0] - 104, first_position[1])
-                )
+                self.positions.append((self.positions[i - 1][0] - 104, first_position[1]))
             else:
-                self.positions.append(
-                    (self.positions[i - 1][0] - 50, first_position[1])
-                )
+                self.positions.append((self.positions[i - 1][0] - 50, first_position[1]))
 
         first_position_down = (FIELD_POS[0] + 62, FIELD_POS[1] + 504)
         self.position_down.append(first_position_down)
         for i in range(1, 12):
             if i == 6:
-                self.position_down.append(
-                    (self.position_down[i - 1][0] + 104, first_position_down[1])
-                )
+                self.position_down.append((self.position_down[i - 1][0] + 104, first_position_down[1]))
             else:
-                self.position_down.append(
-                    (self.position_down[i - 1][0] + 50, first_position_down[1])
-                )
+                self.position_down.append((self.position_down[i - 1][0] + 50, first_position_down[1]))
 
     def get_pike_by_coordinates(self, x, y):
         for i in range(24):
@@ -138,7 +111,7 @@ class Field:
 
         a = self.points[move.start].pop()
         if move.start == self.last_point_index[move.color]:
-            self.houses[move.color].push(a)
+            self.finish[move.color].push(a)
         else:
             self.points[move.end].push(a)
 
@@ -164,7 +137,7 @@ class Field:
                 return False
 
         if (self.last_point_index[move.color] == move.start
-                and (self.last_point[move.color].count + self.houses[move.color].count) != CHECKERS_COUNT):
+                and (self.last_point[move.color].count + self.finish[move.color].count) != CHECKERS_COUNT):
             return False
         if end.count == 0:
             return True
@@ -185,4 +158,4 @@ class Field:
         return False
 
     def can_endgame(self, color):
-        return self.last_point[color].count + self.houses[color].count == 12
+        return self.last_point[color].count + self.finish[color].count == 12

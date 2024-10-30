@@ -20,7 +20,6 @@ from ..utils.move import Move
 class Game:
     def __init__(self):
         pygame.init()
-
         self._renderer = Renderer()
         self._event_handler = EventHandler(self)
         self._field = Field(self._renderer)
@@ -78,7 +77,7 @@ class Game:
                                                self._current_color)
                 continue
 
-            self.get_winner()
+            self.check_winner()
 
             if self._bot is not None and self._bot.color == self._current_color:
                 moves = self._bot.get_moves(self._field, self._dices)
@@ -101,12 +100,14 @@ class Game:
                 self._current_color = (self._current_color + 1) % 2
                 self.throw_bones()
 
-
-    def throw_bones(self):
-        self.field.fill_pikes([], [])
+    def reset_pike_colors(self):
+        self.field.recolor_pikes([], [])
         for pike in self.field.pikes:
             self._renderer.draw_pike(pike)
         self._renderer.draw_checkers(self.field.points, self.field.pikes)
+
+    def throw_bones(self):
+        self.reset_pike_colors()
         if self._bot is None or self._current_color == WHITE:
             self._renderer.draw_buttons(self._throw_dices_button)
             pygame.display.update()
@@ -140,12 +141,12 @@ class Game:
                     self._field.selected = -1
         self._field.selected_end = -1
 
-    def get_winner(self):
-        if self._field.houses[BLACK].count == 12:
+    def check_winner(self):
+        if self._field.finish[BLACK].count == 12:
             self._winner = BLACK
             pygame.time.wait(10)
             pygame.quit()
-        elif self._field.houses[WHITE].count == 12:
+        elif self._field.finish[WHITE].count == 12:
             self._winner = WHITE
             pygame.time.wait(10)
             pygame.quit()
