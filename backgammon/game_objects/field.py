@@ -1,11 +1,17 @@
+import pygame
+
+
 from ..constants import WHITE, BLACK, NONE, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
-    PIKE_DEFAULT_COLOR, FIELD_POS
+    PIKE_DEFAULT_COLOR, FIELD_POS, THROW_DICES_BUTTON_PATH
+from ..game_core.event_handler import EventHandler
 
 from ..game_core.renderer import Renderer
 from ..game_objects.pike import Pike
 from ..game_objects.point import Point
 from ..utils.help_utils import is_move_correct
 from ..utils.move import Move
+from ..buttons.button import Button
+from ..utils.help_utils import get_dices_box_rect
 
 
 class Field:
@@ -23,6 +29,7 @@ class Field:
         self.houses = {WHITE: Point(), BLACK: Point()}
         self.winner = NONE
         self.moves = (0, 0)
+        self._throw_dices_button = Button(get_dices_box_rect(), THROW_DICES_BUTTON_PATH)
 
         self.selected = -1
         self.selected_end = -1
@@ -50,7 +57,9 @@ class Field:
     def output(self, dices, current_color):
         self.renderer.draw_game_bg()
         self.renderer.draw_field_bg()
+
         possible_moves, selected_set = self.check_selected(dices)
+
         self.fill_pikes(possible_moves, selected_set)
         self.fill_columns()
         self.renderer.draw_dices(dices, current_color)

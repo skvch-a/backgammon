@@ -22,6 +22,7 @@ CHECKER_BLACK_PATH = "assets/images/checker_black.png"
 CHECKER_WHITE_PATH = "assets/images/checker_white.png"
 MENU_BG_PATH = "assets/images/menu.png"
 GAME_BG_PATH = "assets/images/game_bg.png"
+THROW_DICES_BUTTON_PATH = "assets/images/throw_dices.png"
 
 FIELD_POS = (84, 220)
 

@@ -65,7 +65,20 @@ class EventHandler:
     def get_pressed_button_index(events: list[pygame.event.Event], buttons: list[Button]) -> int:
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()
+
                 for button_index in range(len(buttons)):
-                    if buttons[button_index].is_pressed(mouse_pos):
+                    if buttons[button_index].is_pressed(event.pos):
                         return button_index
+
+    @staticmethod
+    def wait_until_button_pressed(button) -> None:
+        is_pressed = False
+        while not is_pressed:
+            events = pygame.event.get()
+            for event in events:
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+                if event.type == pygame.MOUSEBUTTONDOWN and button.is_pressed(event.pos):
+                    is_pressed = True
+                    break

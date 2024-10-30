@@ -25,7 +25,7 @@ class Menu:
     def choose_game_mode(self):
         while True:
             self.renderer.draw_menu_background(self.background_image)
-            self.renderer.draw_buttons(self.menu_buttons)
+            self.renderer.draw_buttons(*self.menu_buttons)
             pressed_button_index = self.event_handler.handle_menu_events(self.menu_buttons)
             if pressed_button_index == 0:
                 return

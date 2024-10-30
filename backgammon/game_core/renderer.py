@@ -1,7 +1,10 @@
+import sys
+
 import pygame
 
+from backgammon.buttons.button import Button
 from backgammon.constants import *
-from backgammon.utils.help_utils import get_image, get_dices_rect
+from backgammon.utils.help_utils import get_image, get_dices_box_rect
 
 
 class Renderer:
@@ -12,17 +15,14 @@ class Renderer:
         self._font = pygame.font.SysFont("Impact", 40)
         self._dice_sprites = self._get_dice_sprites()
         self._game_bg = get_image(GAME_BG_PATH, SCREEN_SIZE)
-
-        self.white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
-        self.black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
+        self._dices_box_rect = get_dices_box_rect()
+        self._throw_dices_button_image = pygame.image.load(THROW_DICES_BUTTON_PATH)
+        self._white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
+        self._black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
 
     def draw_dices(self, dices, current_color):
-        rect = get_dices_rect()
-
-        if current_color == WHITE:
-            rect_color = (255, 255, 255)
-        else:
-            rect_color = (0, 0, 0)
+        rect = self._dices_box_rect
+        rect_color = (255, 255, 255) if current_color == WHITE else (0, 0, 0)
         pygame.draw.rect(self._screen, rect_color, rect)
 
         indent = 0
@@ -40,12 +40,12 @@ class Renderer:
     def draw_menu_background(self, background_image):
         self._screen.blit(background_image, (0, 0))
 
-    def draw_buttons(self, buttons):
+    def draw_buttons(self, *buttons):
         for button in buttons:
             button.draw(self._screen)
 
     def draw_checker(self, checker_color, checker_number, pike):
-        image = self.white_checker_image if checker_color == WHITE else self.black_checker_image
+        image = self._white_checker_image if checker_color == WHITE else self._black_checker_image
         self._screen.blit(image, pike.get_checker_position(checker_number))
 
     def draw_game_bg(self):
@@ -57,14 +57,16 @@ class Renderer:
     def draw_pike(self, pike):
         pygame.draw.polygon(self._screen, pike.color, pike.vertices)
 
-    @staticmethod
-    def update_controls(field, dices, secret_flag, needed_color, current_color):
+    def update_controls(self, field, dices, secret_flag, needed_color, current_color):
         if not secret_flag:
             field.output(dices, current_color)
         else:
             current_color = needed_color.get_color()
             field.output(dices, current_color)
             needed_color.set_color(10, 5, 3)
+
+        self.draw_turn_text(current_color)
+        pygame.display.update()
 
     @staticmethod
     def _get_dice_sprites():
