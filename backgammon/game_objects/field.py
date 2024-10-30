@@ -72,14 +72,10 @@ class Field:
             if selected == i:
                 selected_set.add(i)
                 for j in dices:
-                    if not is_move_correct(
-                            i, (i + j) % 24, self.points[selected].peek()
-                    ):
+                    if not is_move_correct(i, (i + j) % 24, self.points[selected].peek()):
                         continue
                     possible_moves.add((i + j) % 24)
-                if is_move_correct(
-                        i, (i + sum(dices)) % 24, self.points[selected].peek()
-                ):
+                if is_move_correct(i, (i + sum(dices)) % 24, self.points[selected].peek()):
                     possible_moves.add((i + sum(dices)) % 24)
 
             self.renderer.draw_pike(self.pikes[i])
