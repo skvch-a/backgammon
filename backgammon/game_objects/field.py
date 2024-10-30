@@ -6,7 +6,7 @@ from ..game_objects.point import Point
 from ..utils.help_utils import get_dices_box_rect
 from ..utils.help_utils import is_move_correct
 from ..utils.move import Move
-
+from ..buttons.button import Button
 
 class Field:
     def __init__(self, renderer: Renderer):
@@ -48,9 +48,18 @@ class Field:
             pike_type = 3
         return pike_type
 
-    def output(self, dices):
+    def recolor_pikes(self, dices):
         possible_moves, selected_set = self.check_selected(dices)
-        self.recolor_pikes(possible_moves, selected_set)
+        for i in range(24):
+            pike = self.pikes[i]
+            if i in selected_set:
+                pike.change_color(PIKE_SELECTED_COLOR)
+            elif i in possible_moves:
+                move = Move(self.selected, i, self.points[self.selected].peek())
+                if self.is_move_correct(move):
+                    pike.change_color(PIKE_POSSIBLE_MOVE_COLOR)
+            else:
+                pike.change_color(PIKE_DEFAULT_COLOR)
 
     def check_selected(self, dices):
         selected_set = set()
@@ -67,22 +76,10 @@ class Field:
                     possible_moves.add((i + sum(dices)) % 24)
         return possible_moves, selected_set
 
-    def fill_columns(self):
+    def draw_checkers(self):
         for point, pike in zip(self.points, self.pikes):
             for checker_number in range(point.count):
                 self.renderer.draw_checker(point.peek(), checker_number, pike)
-
-    def recolor_pikes(self, possible_moves, selected_set):
-        for i in range(24):
-            pike = self.pikes[i]
-            if i in selected_set:
-                pike.change_color(PIKE_SELECTED_COLOR)
-            elif i in possible_moves:
-                move = Move(self.selected, i, self.points[self.selected].peek())
-                if self.is_move_correct(move):
-                    pike.change_color(PIKE_POSSIBLE_MOVE_COLOR)
-            else:
-                pike.change_color(PIKE_DEFAULT_COLOR)
 
     def fill_positions(self):
         first_position = (FIELD_POS[0] + 666, FIELD_POS[1] + 42)

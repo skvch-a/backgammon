@@ -48,6 +48,11 @@ class Renderer:
         image = self._white_checker_image if checker_color == WHITE else self._black_checker_image
         self._screen.blit(image, pike.get_checker_position(checker_number))
 
+    def draw_checkers(self, points, pikes):
+        for point, pike in zip(points, pikes):
+            for checker_number in range(point.count):
+                self.draw_checker(point.peek(), checker_number, pike)
+
     def draw_game_bg(self):
         self._screen.blit(self._game_bg, (0, 0))
 
@@ -64,9 +69,9 @@ class Renderer:
     def draw_field(self, field, dices, current_color):
         self.draw_game_bg()
         self.draw_field_bg()
-        field.output(dices)
+        field.recolor_pikes(dices)
         self.draw_pikes(field.pikes)
-        field.fill_columns()
+        self.draw_checkers(field.points, field.pikes)
         self.draw_dices(dices, current_color)
 
     def update_controls(self, field, dices, secret_flag, needed_color, current_color):

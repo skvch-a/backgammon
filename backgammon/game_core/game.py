@@ -103,10 +103,10 @@ class Game:
 
 
     def throw_bones(self):
-        self.field.recolor_pikes([], [])
+        self.field.recolor_pikes(self.dices)
         for pike in self.field.pikes:
             self._renderer.draw_pike(pike)
-        self.field.fill_columns()
+        self._renderer.draw_checkers(self.field.points, self.field.pikes)
         if self._bot is None or self._current_color == WHITE:
             self._renderer.draw_buttons(self._throw_dices_button)
             pygame.display.update()
