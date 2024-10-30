@@ -1,17 +1,11 @@
-import pygame
-
-
 from ..constants import WHITE, BLACK, NONE, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
     PIKE_DEFAULT_COLOR, FIELD_POS, THROW_DICES_BUTTON_PATH
-from ..game_core.event_handler import EventHandler
-
 from ..game_core.renderer import Renderer
 from ..game_objects.pike import Pike
 from ..game_objects.point import Point
+from ..utils.help_utils import get_dices_box_rect
 from ..utils.help_utils import is_move_correct
 from ..utils.move import Move
-from ..buttons.button import Button
-from ..utils.help_utils import get_dices_box_rect
 
 
 class Field:
@@ -56,8 +50,7 @@ class Field:
 
     def output(self, dices):
         possible_moves, selected_set = self.check_selected(dices)
-        self.fill_pikes(possible_moves, selected_set)
-
+        self.recolor_pikes(possible_moves, selected_set)
 
     def check_selected(self, dices):
         selected_set = set()
@@ -72,8 +65,6 @@ class Field:
                     possible_moves.add((i + j) % 24)
                 if is_move_correct(i, (i + sum(dices)) % 24, self.points[selected].peek()):
                     possible_moves.add((i + sum(dices)) % 24)
-
-
         return possible_moves, selected_set
 
     def fill_columns(self):
@@ -81,17 +72,13 @@ class Field:
             for checker_number in range(point.count):
                 self.renderer.draw_checker(point.peek(), checker_number, pike)
 
-    def fill_pikes(self, possible_moves, selected_set):
+    def recolor_pikes(self, possible_moves, selected_set):
         for i in range(24):
             pike = self.pikes[i]
             if i in selected_set:
                 pike.change_color(PIKE_SELECTED_COLOR)
             elif i in possible_moves:
-                move = Move(
-                    self.selected,
-                    i,
-                    self.points[self.selected].peek(),
-                )
+                move = Move(self.selected, i, self.points[self.selected].peek())
                 if self.is_move_correct(move):
                     pike.change_color(PIKE_POSSIBLE_MOVE_COLOR)
             else:
@@ -102,25 +89,17 @@ class Field:
         self.positions.append(first_position)
         for i in range(1, 12):
             if i == 6:
-                self.positions.append(
-                    (self.positions[i - 1][0] - 104, first_position[1])
-                )
+                self.positions.append((self.positions[i - 1][0] - 104, first_position[1]))
             else:
-                self.positions.append(
-                    (self.positions[i - 1][0] - 50, first_position[1])
-                )
+                self.positions.append((self.positions[i - 1][0] - 50, first_position[1]))
 
         first_position_down = (FIELD_POS[0] + 62, FIELD_POS[1] + 504)
         self.position_down.append(first_position_down)
         for i in range(1, 12):
             if i == 6:
-                self.position_down.append(
-                    (self.position_down[i - 1][0] + 104, first_position_down[1])
-                )
+                self.position_down.append((self.position_down[i - 1][0] + 104, first_position_down[1]))
             else:
-                self.position_down.append(
-                    (self.position_down[i - 1][0] + 50, first_position_down[1])
-                )
+                self.position_down.append((self.position_down[i - 1][0] + 50, first_position_down[1]))
 
     def get_pike_by_coordinates(self, x, y):
         for i in range(24):

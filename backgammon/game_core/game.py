@@ -103,7 +103,7 @@ class Game:
 
 
     def throw_bones(self):
-        self.field.fill_pikes([], [])
+        self.field.recolor_pikes([], [])
         for pike in self.field.pikes:
             self._renderer.draw_pike(pike)
         self.field.fill_columns()
