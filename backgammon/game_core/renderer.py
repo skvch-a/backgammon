@@ -71,7 +71,7 @@ class Renderer:
         self.draw_checkers(field.points, field.pikes)
         self.draw_dices(dices, current_color)
 
-    def update_controls(self, field, dices, secret_flag, needed_color, current_color):
+    def update(self, field, dices, secret_flag, needed_color, current_color):
         if not secret_flag:
             self.draw_field(field, dices, current_color)
         else:

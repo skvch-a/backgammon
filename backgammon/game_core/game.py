@@ -66,47 +66,40 @@ class Game:
         pygame.mixer.music.play(-1)
         self._bot: Bot = self._menu.choose_game_mode()
 
-        self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color,
-                                       self._current_color)
-        self.throw_bones()
+        self._renderer.update(self._field, self._dices, self._secret_flag, self._needed_color, self._current_color)
+        self.throw_dices()
 
         while self._winner == NONE:
             if not self._field.has_legal_move(self._dices, self._current_color):
-                self.throw_bones()
+                self.throw_dices()
                 self.change_color()
-                self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color,
-                                               self._current_color)
-                continue
-
-            self.get_winner()
-
-            if self._bot is not None and self._bot.color == self._current_color:
+                self._renderer.update(self._field, self._dices, self._secret_flag, self._needed_color,
+                                      self._current_color)
+            elif self._bot is not None and self._bot.color == self._current_color:
                 moves = self._bot.get_moves(self._field, self._dices)
                 for move in moves:
                     self._field.make_move(move)
-                    if self._field.can_endgame(self._bot.color):
-                        break
-                pygame.time.wait(1000)
-                self._current_color = (self._current_color + 1) % 2
-                self.throw_bones()
-                continue
+
+                self.change_color()
+                self._renderer.update(self._field, self._dices, self._secret_flag, self._needed_color,
+                                      self._current_color)
+                self.throw_dices()
+            else:
+                self._event_handler.handle_game_events()
+                self.make_move_by_mouse()
+                self._renderer.update(self._field, self._dices, self._secret_flag, self._needed_color,
+                                      self._current_color)
+                if len(self._dices) == 0:
+                    self.change_color()
+                    self.throw_dices()
 
 
-            self._event_handler.handle_game_events()
-            self.make_move_by_mouse()
-
-            self._renderer.update_controls(self._field, self._dices, self._secret_flag, self._needed_color,
-                                           self._current_color)
-            if len(self._dices) == 0:
-                self._current_color = (self._current_color + 1) % 2
-                self.throw_bones()
-
-
-    def throw_bones(self):
-        self.field.recolor_pikes(self.dices)
-        for pike in self.field.pikes:
-            self._renderer.draw_pike(pike)
-        self._renderer.draw_checkers(self.field.points, self.field.pikes)
+    def throw_dices(self, flag=True):
+        if flag:
+            self.field.recolor_pikes(self.dices)
+            for pike in self.field.pikes:
+                self._renderer.draw_pike(pike)
+            self._renderer.draw_checkers(self.field.points, self.field.pikes)
         if self._bot is None or self._current_color == WHITE:
             self._renderer.draw_buttons(self._throw_dices_button)
             pygame.display.update()
@@ -140,12 +133,3 @@ class Game:
                     self._field.selected = -1
         self._field.selected_end = -1
 
-    def get_winner(self):
-        if self._field.houses[BLACK].count == 12:
-            self._winner = BLACK
-            pygame.time.wait(10)
-            pygame.quit()
-        elif self._field.houses[WHITE].count == 12:
-            self._winner = WHITE
-            pygame.time.wait(10)
-            pygame.quit()
