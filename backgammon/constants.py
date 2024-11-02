@@ -1,5 +1,5 @@
-WHITE = 0
-BLACK = 1
+BLACK = 0
+WHITE = 1
 NONE = 2
 GAYS = 1
 TITLE = "Alien Nards"

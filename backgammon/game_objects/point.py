@@ -1,4 +1,4 @@
-from backgammon.constants import BLACK, WHITE
+from backgammon.constants import WHITE, BLACK, NONE
 
 
 class Point:
@@ -7,8 +7,15 @@ class Point:
         self._check_all_checkers_one_color()
 
     def _check_all_checkers_one_color(self):
-        if self._checkers.count(BLACK) != len(self._checkers) and self._checkers.count(WHITE) != len(self._checkers):
+        if self._checkers.count(WHITE) != len(self._checkers) and self._checkers.count(BLACK) != len(self._checkers):
             raise ValueError("All checkers in point must have same color")
+
+    @property
+    def color(self):
+        checker = self.peek()
+        if checker is None:
+            return NONE
+        return checker
 
     @property
     def count(self):
@@ -20,6 +27,8 @@ class Point:
         self._checkers.append(color)
 
     def pop(self):
+        if len(self._checkers) == 0:
+            return
         return self._checkers.pop()
 
     def peek(self):

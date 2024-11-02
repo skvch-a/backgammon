@@ -1,22 +1,18 @@
-from ..constants import BLACK, WHITE, NONE, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
-    PIKE_DEFAULT_COLOR, FIELD_POS, THROW_DICES_BUTTON_PATH
-from ..game_core.renderer import Renderer
+from ..constants import WHITE, BLACK, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
+    PIKE_DEFAULT_COLOR, FIELD_POS
 from ..game_objects.pike import Pike
 from ..game_objects.point import Point
-from ..utils.help_utils import get_dices_box_rect
 from ..utils.help_utils import is_move_correct
 from ..utils.move import Move
-from ..buttons.button import Button
 
 class Field:
-    def __init__(self, renderer: Renderer):
-        self.renderer = renderer
+    def __init__(self):
         self.points = [Point() for _ in range(24)]
         for i in range(CHECKERS_COUNT):
-            self.points[0].push(BLACK)
-            self.points[12].push(WHITE)
+            self.points[0].push(WHITE)
+            self.points[12].push(BLACK)
 
-        self.last_point_index = {BLACK: 23, WHITE: 11}
+        self.last_point_index = {WHITE: 23, BLACK: 11}
         self.selected = -1
         self.selected_end = -1
         self.positions = []
@@ -28,7 +24,7 @@ class Field:
             self.pikes.append(Pike(pos[0], pos[1], self._get_pike_type(i)))
         for i, pos in enumerate(self.position_down):
             self.pikes.append(Pike(pos[0], pos[1], self._get_pike_type(i), True))
-
+            
     def recolor_pikes(self, dices):
         possible_moves, selected_set = self._check_selected(dices)
         for i in range(24):
@@ -54,10 +50,11 @@ class Field:
 
     def make_move(self, move):
         if self.is_move_correct(move):
+            print(f'{move.color} ход из {move.start} в {move.end}')
             self.points[move.end].push(self.points[move.start].pop())
 
     def is_move_correct(self, move, dice=None):
-        if move is None:
+        if move is None or move.start == move.end:
             return False
         if dice is not None:
             if (move.end - move.start) % 24 != dice:
@@ -70,12 +67,10 @@ class Field:
         if start.peek() != move.color:
             return False
 
-        if move.color == WHITE:
-            if move.start < self.last_point_index[WHITE] < move.end:
-                return False
-        if move.color == BLACK:
-            if move.start > move.end and move.start != 23:
-                return False
+        if move.color == BLACK and move.start <= self.last_point_index[BLACK] <= move.end:
+            return False
+        if move.color == WHITE and move.start > move.end:
+            return False
 
         if end.count == 0:
             return True

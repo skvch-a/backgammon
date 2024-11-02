@@ -19,7 +19,7 @@ class Renderer:
 
     def draw_dices(self, dices, current_color):
         rect = self._dices_box_rect
-        rect_color = (255, 255, 255) if current_color == BLACK else (0, 0, 0)
+        rect_color = (255, 255, 255) if current_color == WHITE else (0, 0, 0)
         pygame.draw.rect(self._screen, rect_color, rect)
 
         indent = 0
@@ -42,7 +42,7 @@ class Renderer:
             button.draw(self._screen)
 
     def draw_checker(self, checker_color, checker_number, pike):
-        image = self._white_checker_image if checker_color == BLACK else self._black_checker_image
+        image = self._white_checker_image if checker_color == WHITE else self._black_checker_image
         self._screen.blit(image, pike.get_checker_position(checker_number))
 
     def draw_checkers(self, points, pikes):

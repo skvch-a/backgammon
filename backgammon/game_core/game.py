@@ -4,7 +4,7 @@ import pygame
 
 from ..bots.bot import Bot
 from ..buttons.button import Button
-from ..constants import NONE, BLACK, MUSIC_PATH, THROW_DICES_BUTTON_PATH
+from ..constants import NONE, WHITE, MUSIC_PATH, THROW_DICES_BUTTON_PATH
 from ..game_core.event_handler import EventHandler
 from ..game_core.menu import Menu
 from ..game_core.renderer import Renderer
@@ -19,7 +19,7 @@ class Game:
         pygame.init()
         self._renderer = Renderer()
         self._event_handler = EventHandler(self)
-        self._field = Field(self._renderer)
+        self._field = Field()
         self._menu = Menu(self._event_handler, self._renderer)
         self._current_dice = -1
         self._dices = []
@@ -52,12 +52,6 @@ class Game:
     def current_color(self):
         return self._current_color
 
-    def update_current_dice(self):
-        self._current_dice %= len(self.dices)
-
-    def change_color(self):
-        self._current_color = (self._current_color + 1) % 2
-
     def run(self):
         pygame.mixer.music.load(MUSIC_PATH)
         pygame.mixer.music.play(-1)
@@ -66,9 +60,16 @@ class Game:
         self._renderer.render(self._field, self._dices, self._current_color)
         self.throw_dices()
 
-        while not self._is_endgame:
+        while not self._event_handler.is_over:
             self._event_handler.handle_game_events()
             self._renderer.render(self._field, self._dices, self._current_color)
+
+
+    def update_current_dice(self):
+        self._current_dice %= len(self.dices)
+
+    def change_color(self):
+        self._current_color = (self._current_color + 1) % 2
 
     def switch_turn(self):
         self.change_color()
@@ -80,7 +81,7 @@ class Game:
         return self._bot is not None and self._bot.color == self._current_color
 
     def throw_dices(self):
-        if not self.is_bot_move():
+        if not self.is_bot_move() and False:
             self._renderer.draw_buttons(self._throw_dices_button)
             pygame.display.update()
             EventHandler.wait_until_button_pressed(self._throw_dices_button)
