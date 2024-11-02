@@ -15,19 +15,10 @@ class Field:
         for i in range(CHECKERS_COUNT):
             self.points[0].push(BLACK)
             self.points[12].push(WHITE)
+
         self.last_point_index = {BLACK: 23, WHITE: 11}
-        self.first_point_index = {BLACK: 0, WHITE: 12}
-        self.last_point = {BLACK: self.points[23], WHITE: self.points[11]}
-        self.first_point = {BLACK: self.points[0], WHITE: self.points[12]}
-
-        self.winner = NONE
-        self.moves = (0, 0)
-        self._throw_dices_button = Button(get_dices_box_rect(), THROW_DICES_BUTTON_PATH)
-
         self.selected = -1
         self.selected_end = -1
-
-        self.warned_column = -1
         self.positions = []
         self.position_down = []
         self._fill_positions()
