@@ -13,6 +13,7 @@ class EventHandler:
         self._game.update_current_dice()
         self.select_pike(events)
         self.make_move_by_pressing_button(events)
+        self._game.make_move_by_mouse()
 
     def handle_menu_events(self, menu_buttons: list[Button]) -> int:
         events = pygame.event.get()

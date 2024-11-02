@@ -1,3 +1,5 @@
+from random import randint
+
 from ..constants import WHITE, BLACK, NONE, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
     PIKE_DEFAULT_COLOR, FIELD_POS, THROW_DICES_BUTTON_PATH
 from ..game_core.renderer import Renderer
@@ -103,6 +105,10 @@ class Field:
             if self.pikes[i].is_inside(x, y):
                 return i
         return -1
+
+    def make_moves(self, moves):
+        for move in moves:
+            self.make_move(move)
 
     def make_move(self, move):
         if not self.is_move_correct(move):
