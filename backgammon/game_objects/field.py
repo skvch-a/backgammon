@@ -1,5 +1,3 @@
-from random import randint
-
 from ..constants import WHITE, BLACK, NONE, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
     PIKE_DEFAULT_COLOR, FIELD_POS, THROW_DICES_BUTTON_PATH
 from ..game_core.renderer import Renderer
@@ -33,25 +31,16 @@ class Field:
         self.warned_column = -1
         self.positions = []
         self.position_down = []
-        self.fill_positions()
+        self._fill_positions()
         self.pikes = []
 
         for i, pos in enumerate(self.positions):
-            self.pikes.append(Pike(pos[0], pos[1], self.get_pike_type(i)))
+            self.pikes.append(Pike(pos[0], pos[1], self._get_pike_type(i)))
         for i, pos in enumerate(self.position_down):
-            self.pikes.append(Pike(pos[0], pos[1], self.get_pike_type(i), True))
-
-    @staticmethod
-    def get_pike_type(pike_index):
-        pike_type = 1
-        if pike_index % 6 == 1 or pike_index % 6 == 4:
-            pike_type = 2
-        elif pike_index % 6 == 2 or pike_index % 6 == 3:
-            pike_type = 3
-        return pike_type
+            self.pikes.append(Pike(pos[0], pos[1], self._get_pike_type(i), True))
 
     def recolor_pikes(self, dices):
-        possible_moves, selected_set = self.check_selected(dices)
+        possible_moves, selected_set = self._check_selected(dices)
         for i in range(24):
             pike = self.pikes[i]
             if i in selected_set:
@@ -62,43 +51,6 @@ class Field:
                     pike.change_color(PIKE_POSSIBLE_MOVE_COLOR)
             else:
                 pike.change_color(PIKE_DEFAULT_COLOR)
-
-    def check_selected(self, dices):
-        selected_set = set()
-        possible_moves = set()
-        for i in range(24):
-            selected = self.selected
-            if selected == i:
-                selected_set.add(i)
-                for j in dices:
-                    if not is_move_correct(i, (i + j) % 24, self.points[selected].peek()):
-                        continue
-                    possible_moves.add((i + j) % 24)
-                if is_move_correct(i, (i + sum(dices)) % 24, self.points[selected].peek()):
-                    possible_moves.add((i + sum(dices)) % 24)
-        return possible_moves, selected_set
-
-    def draw_checkers(self):
-        for point, pike in zip(self.points, self.pikes):
-            for checker_number in range(point.count):
-                self.renderer.draw_checker(point.peek(), checker_number, pike)
-
-    def fill_positions(self):
-        first_position = (FIELD_POS[0] + 666, FIELD_POS[1] + 42)
-        self.positions.append(first_position)
-        for i in range(1, 12):
-            if i == 6:
-                self.positions.append((self.positions[i - 1][0] - 104, first_position[1]))
-            else:
-                self.positions.append((self.positions[i - 1][0] - 50, first_position[1]))
-
-        first_position_down = (FIELD_POS[0] + 62, FIELD_POS[1] + 504)
-        self.position_down.append(first_position_down)
-        for i in range(1, 12):
-            if i == 6:
-                self.position_down.append((self.position_down[i - 1][0] + 104, first_position_down[1]))
-            else:
-                self.position_down.append((self.position_down[i - 1][0] + 50, first_position_down[1]))
 
     def get_pike_by_coordinates(self, x, y):
         for i in range(24):
@@ -164,3 +116,44 @@ class Field:
 
     def can_endgame(self, color):
         return self.last_point[color].count + self.houses[color].count == 12
+
+    def _check_selected(self, dices):
+        selected_set = set()
+        possible_moves = set()
+        for i in range(24):
+            selected = self.selected
+            if selected == i:
+                selected_set.add(i)
+                for j in dices:
+                    if not is_move_correct(i, (i + j) % 24, self.points[selected].peek()):
+                        continue
+                    possible_moves.add((i + j) % 24)
+                if is_move_correct(i, (i + sum(dices)) % 24, self.points[selected].peek()):
+                    possible_moves.add((i + sum(dices)) % 24)
+        return possible_moves, selected_set
+
+    def _fill_positions(self):
+        first_position = (FIELD_POS[0] + 666, FIELD_POS[1] + 42)
+        self.positions.append(first_position)
+        for i in range(1, 12):
+            if i == 6:
+                self.positions.append((self.positions[i - 1][0] - 104, first_position[1]))
+            else:
+                self.positions.append((self.positions[i - 1][0] - 50, first_position[1]))
+
+        first_position_down = (FIELD_POS[0] + 62, FIELD_POS[1] + 504)
+        self.position_down.append(first_position_down)
+        for i in range(1, 12):
+            if i == 6:
+                self.position_down.append((self.position_down[i - 1][0] + 104, first_position_down[1]))
+            else:
+                self.position_down.append((self.position_down[i - 1][0] + 50, first_position_down[1]))
+
+    @staticmethod
+    def _get_pike_type(pike_index):
+        pike_type = 1
+        if pike_index % 6 == 1 or pike_index % 6 == 4:
+            pike_type = 2
+        elif pike_index % 6 == 2 or pike_index % 6 == 3:
+            pike_type = 3
+        return pike_type
