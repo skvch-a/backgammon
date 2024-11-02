@@ -20,7 +20,6 @@ class Field:
         self.last_point = {BLACK: self.points[23], WHITE: self.points[11]}
         self.first_point = {BLACK: self.points[0], WHITE: self.points[12]}
 
-        self.houses = {BLACK: Point(), WHITE: Point()}
         self.winner = NONE
         self.moves = (0, 0)
         self._throw_dices_button = Button(get_dices_box_rect(), THROW_DICES_BUTTON_PATH)
@@ -63,14 +62,8 @@ class Field:
             self.make_move(move)
 
     def make_move(self, move):
-        if not self.is_move_correct(move):
-            return
-
-        a = self.points[move.start].pop()
-        if move.start == self.last_point_index[move.color]:
-            self.houses[move.color].push(a)
-        else:
-            self.points[move.end].push(a)
+        if self.is_move_correct(move):
+            self.points[move.end].push(self.points[move.start].pop())
 
     def is_move_correct(self, move, dice=None):
         if move is None:
@@ -93,9 +86,6 @@ class Field:
             if move.start > move.end and move.start != 23:
                 return False
 
-        if (self.last_point_index[move.color] == move.start
-                and (self.last_point[move.color].count + self.houses[move.color].count) != CHECKERS_COUNT):
-            return False
         if end.count == 0:
             return True
         if end.peek() != move.color:
@@ -113,9 +103,6 @@ class Field:
                     if self.is_move_correct(move):
                         return True
         return False
-
-    def can_endgame(self, color):
-        return self.last_point[color].count + self.houses[color].count == 12
 
     def _check_selected(self, dices):
         selected_set = set()

@@ -23,7 +23,7 @@ class Game:
         self._menu = Menu(self._event_handler, self._renderer)
         self._current_dice = -1
         self._dices = []
-        self._winner = NONE
+        self._is_endgame = False
         self._current_color = 1
         self._selected_pike = 0
         self._throw_dices_button = Button(get_dices_box_rect(), THROW_DICES_BUTTON_PATH)
@@ -66,7 +66,7 @@ class Game:
         self._renderer.render(self._field, self._dices, self._current_color)
         self.throw_dices()
 
-        while self._winner == NONE:
+        while not self._is_endgame:
             self._event_handler.handle_game_events()
             self._renderer.render(self._field, self._dices, self._current_color)
 
