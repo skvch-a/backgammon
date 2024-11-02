@@ -10,11 +10,6 @@ class Bot(abc.ABC):
     def color(self):
         return self._color
 
-    @staticmethod
-    @abc.abstractmethod
-    def get_name() -> str:
-        pass
-
     @abc.abstractmethod
     def get_moves(self, field: Field, dices: list) -> list[Move]:
         pass

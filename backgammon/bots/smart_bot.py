@@ -9,16 +9,12 @@ class SmartBot(Bot):
     def __init__(self, color=BLACK):
         super().__init__(color)
 
-    @staticmethod
-    def get_name():
-        return "smart"
-
     def get_moves(self, field, dices):
         diapason = list(range(23))
-        what_move = [0, 1, 2]
-        random.shuffle(what_move)
+        dices_variations = [0, 1, 2]
+        random.shuffle(dices_variations)
         moves = []
-        for i in what_move:
+        for i in dices_variations:
             random.shuffle(diapason)
             for col in diapason:
                 if field.points[col].peek() == self._color:

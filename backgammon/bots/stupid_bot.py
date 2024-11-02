@@ -7,10 +7,6 @@ class StupidBot(Bot):
     def __init__(self, color=BLACK):
         super().__init__(color)
 
-    @staticmethod
-    def get_name():
-        return "stupid"
-
     def get_moves(self, field, dices):
         moves = []
         for col in range(23, -1, -1):
