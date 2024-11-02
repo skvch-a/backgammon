@@ -7,8 +7,8 @@ class Pike:
         self._center_x = center_x
         self._x = center_x - PIKE_WIDTH / 2
         self._y = y
-        self._height = -1 * PIKE_BASE_HEIGHT if reverse else PIKE_BASE_HEIGHT
-        self._render_height = self._height / pike_type
+        self._signed_height = -1 * PIKE_BASE_HEIGHT if reverse else PIKE_BASE_HEIGHT
+        self._render_height = self._signed_height / pike_type
 
     @property
     def vertices(self):
@@ -19,7 +19,7 @@ class Pike:
         return self._color
 
     def get_checker_position(self, checker_number):
-        return self._center_x - CHECKER_HALF_SIZE, self._y + self._height / 15 * checker_number - CHECKER_HALF_SIZE
+        return self._center_x - CHECKER_HALF_SIZE, self._y + self._signed_height / 15 * checker_number - CHECKER_HALF_SIZE
 
     def change_color(self, color):
         self._color = color
@@ -30,7 +30,7 @@ class Pike:
         x3 = self._center_x
         y1 = self._y
         y2 = self._y
-        y3 = self._y + self._height
+        y3 = self._y + self._signed_height
 
         s1 = (x1 - x) * (y2 - y1) - (x2 - x1) * (y1 - y)
         s2 = (x2 - x) * (y3 - y2) - (x3 - x2) * (y2 - y)

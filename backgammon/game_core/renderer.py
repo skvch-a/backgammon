@@ -1,8 +1,5 @@
-import sys
-
 import pygame
 
-from backgammon.buttons.button import Button
 from backgammon.constants import *
 from backgammon.utils.help_utils import get_image, get_dices_box_rect
 
@@ -19,12 +16,6 @@ class Renderer:
         self._throw_dices_button_image = pygame.image.load(THROW_DICES_BUTTON_PATH)
         self._white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
         self._black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
-
-    def draw_field(self, points, pikes, dices, current_color):
-        self.draw_game_bg()
-        self.draw_field_bg()
-        self.draw_checkers(points, pikes)
-        self.draw_dices(dices, current_color)
 
     def draw_dices(self, dices, current_color):
         rect = self._dices_box_rect
@@ -68,14 +59,20 @@ class Renderer:
     def draw_pike(self, pike):
         pygame.draw.polygon(self._screen, pike.color, pike.vertices)
 
-    def update_controls(self, field, dices, secret_flag, needed_color, current_color):
-        if not secret_flag:
-            field.update(dices, current_color)
-        else:
-            current_color = needed_color.get_color()
-            field.update(dices, current_color)
-            needed_color.set_color(10, 5, 3)
+    def draw_pikes(self, pikes):
+        for pike in pikes:
+            self.draw_pike(pike)
 
+    def draw_field(self, field, dices, current_color):
+        self.draw_game_bg()
+        self.draw_field_bg()
+        field.recolor_pikes(dices)
+        self.draw_pikes(field.pikes)
+        self.draw_checkers(field.points, field.pikes)
+        self.draw_dices(dices, current_color)
+
+    def render(self, field, dices, current_color):
+        self.draw_field(field, dices, current_color)
         self.draw_turn_text(current_color)
         pygame.display.update()
 

@@ -1,15 +1,11 @@
 from backgammon.bots.bot import Bot
 from backgammon.utils.move import Move
 from backgammon.constants import BLACK
-from backgammon.game_objects.field import Field
+
 
 class StupidBot(Bot):
     def __init__(self, color=BLACK):
         super().__init__(color)
-
-    @staticmethod
-    def get_name():
-        return "stupid"
 
     def get_moves(self, field, dices):
         moves = []
