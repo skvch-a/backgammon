@@ -1,10 +1,10 @@
 from backgammon.bots.bot import Bot
 from backgammon.utils.move import Move
-from backgammon.constants import BLACK
+from backgammon.constants import WHITE
 
 
 class StupidBot(Bot):
-    def __init__(self, color=BLACK):
+    def __init__(self, color=WHITE):
         super().__init__(color)
 
     def get_moves(self, field, dices):

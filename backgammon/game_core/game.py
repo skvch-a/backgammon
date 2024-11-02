@@ -4,7 +4,7 @@ import pygame
 
 from ..bots.bot import Bot
 from ..buttons.button import Button
-from ..constants import NONE, WHITE, MUSIC_PATH, THROW_DICES_BUTTON_PATH
+from ..constants import NONE, BLACK, MUSIC_PATH, THROW_DICES_BUTTON_PATH
 from ..game_core.event_handler import EventHandler
 from ..game_core.menu import Menu
 from ..game_core.renderer import Renderer
@@ -17,7 +17,6 @@ from ..utils.move import Move
 class Game:
     def __init__(self):
         pygame.init()
-
         self._renderer = Renderer()
         self._event_handler = EventHandler(self)
         self._field = Field(self._renderer)
@@ -26,7 +25,6 @@ class Game:
         self._dices = []
         self._winner = NONE
         self._current_color = 1
-        self._last_dice = (-1, WHITE)
         self._selected_pike = 0
         self._throw_dices_button = Button(get_dices_box_rect(), THROW_DICES_BUTTON_PATH)
         self._bot = None
@@ -90,16 +88,6 @@ class Game:
 
     def make_player_move(self):
         if self._field.selected_end != -1:
-            last_column_index = self._field.last_point_index[self._current_color]
-            if self._field.selected_end == last_column_index:
-                if self._field.can_endgame(self._current_color):
-                    move = Move(last_column_index, last_column_index + 1, self._current_color)
-                    self._field.make_move(move)
-                    self._field.selected = -1
-                    self._field.selected_end = -1
-                    self._dices.clear()
-                    return
-
             move = Move(self._field.selected, self._field.selected_end, self._current_color)
             if self._field.is_move_correct(move):
                 if (self._field.selected_end - self._field.selected) % 24 in self._dices:

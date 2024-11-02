@@ -32,21 +32,10 @@ class EventHandler:
 
     def select_pike(self, events: list[pygame.event.Event]) -> None:
         for event in events:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT:
-                    for i in range(self._game.field.selected - 69, self._game.field.selected):
-                        if self._game.field.points[i % 24].peek() == self._game.current_color:
-                            self._game.field.selected = i % 24
-                if event.key == pygame.K_RIGHT:
-                    for i in range(self._game.field.selected + 1, 69 + self._game.field.selected):
-                        if self._game.field.points[i % 24].peek() == self._game.current_color:
-                            self._game.field.selected = i % 24
-
             if event.type == pygame.MOUSEBUTTONDOWN:
-                x, y = pygame.mouse.get_pos()
-                selected = self._game.field.get_pike_by_coordinates(x, y)
-                target_column_color = self._game.field.points[selected].peek()
+                selected = self._game.field.get_pike(event.pos)
                 if event.button == 1:
+                    target_column_color = self._game.field.points[selected].peek()
                     if target_column_color == self._game.current_color:
                         self._game.field.selected = selected
                 elif event.button == 3:

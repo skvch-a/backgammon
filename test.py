@@ -64,21 +64,21 @@ class NerdsTests(unittest.TestCase):
     def test_is_there_legal_move(self):
         field = self.create_empty_field()
         columns = field.points
-        columns[0].push(WHITE)
+        columns[0].push(BLACK)
         columns[1].push(BLACK)
         columns[2].push(BLACK)
         dices = [1, 1]
-        self.assertFalse(field.has_legal_move(dices, WHITE))
+        self.assertFalse(field.has_legal_move(dices, BLACK))
         self.assertTrue(field.has_legal_move(dices, BLACK))
 
     def test_is_there_legal_move_sum_of_moves_is_legal(self):
         field = self.create_empty_field()
         columns = field.points
-        columns[0].push(WHITE)
+        columns[0].push(BLACK)
         columns[1].push(BLACK)
         columns[2].push(BLACK)
         dices = [1, 2]
-        self.assertTrue(field.has_legal_move(dices, WHITE))
+        self.assertTrue(field.has_legal_move(dices, BLACK))
 
     def test_is_there_legal_move_step_out(self):
         field = self.create_empty_field()
@@ -135,7 +135,7 @@ class NerdsTests(unittest.TestCase):
 
     def test_bot_gives_legal_moves(self):
         field = Field(Renderer())
-        bot_white = StupidBot(WHITE)
+        bot_white = StupidBot(BLACK)
         bot_black = SmartBot(BLACK)
 
         for i in range(10):
@@ -158,10 +158,10 @@ class NerdsTests(unittest.TestCase):
         columns = field.points
 
         columns[0].push(BLACK)
-        columns[1].push(WHITE)
-        columns[2].push(WHITE)
-        columns[3].push(WHITE)
-        columns[4].push(WHITE)
+        columns[1].push(BLACK)
+        columns[2].push(BLACK)
+        columns[3].push(BLACK)
+        columns[4].push(BLACK)
 
         dices = [2, 1]
 
@@ -170,16 +170,16 @@ class NerdsTests(unittest.TestCase):
 
     def test_stupid_bot_is_stupid(self):
         field = self.create_empty_field()
-        bot = StupidBot(WHITE)
+        bot = StupidBot(BLACK)
 
         columns = field.points
 
-        columns[0].push(WHITE)
-        columns[1].push(WHITE)
+        columns[0].push(BLACK)
+        columns[1].push(BLACK)
         dices = [5, 6]
 
         actual_moves = bot.get_moves(field, dices)
-        expected_moves = [Move(1, 1 + 5 + 6, WHITE)]
+        expected_moves = [Move(1, 1 + 5 + 6, BLACK)]
 
         for i in range(len(expected_moves)):
             expected_move = expected_moves[i]

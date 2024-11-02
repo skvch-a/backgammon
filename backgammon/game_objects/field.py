@@ -1,4 +1,4 @@
-from ..constants import WHITE, BLACK, NONE, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
+from ..constants import BLACK, WHITE, NONE, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
     PIKE_DEFAULT_COLOR, FIELD_POS, THROW_DICES_BUTTON_PATH
 from ..game_core.renderer import Renderer
 from ..game_objects.pike import Pike
@@ -13,14 +13,14 @@ class Field:
         self.renderer = renderer
         self.points = [Point() for _ in range(24)]
         for i in range(CHECKERS_COUNT):
-            self.points[0].push(WHITE)
-            self.points[12].push(BLACK)
-        self.last_point_index = {WHITE: 23, BLACK: 11}
-        self.first_point_index = {WHITE: 0, BLACK: 12}
-        self.last_point = {WHITE: self.points[23], BLACK: self.points[11]}
-        self.first_point = {WHITE: self.points[0], BLACK: self.points[12]}
+            self.points[0].push(BLACK)
+            self.points[12].push(WHITE)
+        self.last_point_index = {BLACK: 23, WHITE: 11}
+        self.first_point_index = {BLACK: 0, WHITE: 12}
+        self.last_point = {BLACK: self.points[23], WHITE: self.points[11]}
+        self.first_point = {BLACK: self.points[0], WHITE: self.points[12]}
 
-        self.houses = {WHITE: Point(), BLACK: Point()}
+        self.houses = {BLACK: Point(), WHITE: Point()}
         self.winner = NONE
         self.moves = (0, 0)
         self._throw_dices_button = Button(get_dices_box_rect(), THROW_DICES_BUTTON_PATH)
@@ -52,9 +52,9 @@ class Field:
             else:
                 pike.change_color(PIKE_DEFAULT_COLOR)
 
-    def get_pike_by_coordinates(self, x, y):
+    def get_pike(self, pos):
         for i in range(24):
-            if self.pikes[i].is_inside(x, y):
+            if self.pikes[i].is_inside(pos[0], pos[1]):
                 return i
         return -1
 
@@ -86,10 +86,10 @@ class Field:
         if start.peek() != move.color:
             return False
 
-        if move.color == BLACK:
-            if move.start < self.last_point_index[BLACK] < move.end:
-                return False
         if move.color == WHITE:
+            if move.start < self.last_point_index[WHITE] < move.end:
+                return False
+        if move.color == BLACK:
             if move.start > move.end and move.start != 23:
                 return False
 
