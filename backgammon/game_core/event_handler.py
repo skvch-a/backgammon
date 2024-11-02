@@ -12,7 +12,6 @@ class EventHandler:
         self.check_for_quit(events)
         self._game.update_current_dice()
         self.select_pike(events)
-        self.make_move_by_pressing_button(events)
         self._game.make_move_by_mouse()
 
     def handle_menu_events(self, menu_buttons: list[Button]) -> int:
@@ -41,19 +40,6 @@ class EventHandler:
                         self._game.field.selected = selected
                 elif event.button == 3:
                     self._game.field.selected_end = selected
-
-    def make_move_by_pressing_button(self, events: list[pygame.event.Event]) -> None:
-        move = Move(
-            self._game.field.selected,
-            self._game.field.selected + self._game.dices[self._game.current_dice % 2],
-            self._game.current_color,
-        )
-        for event in events:
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_q:
-                    if self._game.field.is_move_correct(move):
-                        self._game.field.make_move(move)
-                        self._game.dices.pop(self._game.current_dice)
 
     @staticmethod
     def check_for_quit(events: list[pygame.event.Event]) -> None:
