@@ -10,7 +10,6 @@ from ..game_core.menu import Menu
 from ..game_core.renderer import Renderer
 from ..game_objects.field import Field
 from ..game_objects.point import Point
-from ..utils.color_saves import ColorsSaver
 from ..utils.help_utils import get_dices_box_rect
 from ..utils.move import Move
 
@@ -29,8 +28,6 @@ class Game:
         self._current_color = 1
         self._last_dice = (-1, WHITE)
         self._selected_pike = 0
-        self._needed_color = ColorsSaver()
-        self._secret_flag = False
         self._throw_dices_button = Button(get_dices_box_rect(), THROW_DICES_BUTTON_PATH)
         self._bot = None
         self._field.points = [Point(i) for i in
@@ -66,21 +63,19 @@ class Game:
     def run(self):
         pygame.mixer.music.load(MUSIC_PATH)
         pygame.mixer.music.play(-1)
-        self._bot: Bot = self._menu.choose_game_mode()
 
-        self._renderer.redraw(self._field, self._dices, self._secret_flag, self._needed_color, self._current_color)
+        self._bot: Bot = self._menu.choose_game_mode()
+        self._renderer.render(self._field, self._dices, self._current_color)
         self.throw_dices()
 
         while self._winner == NONE:
             self._event_handler.handle_game_events()
-            self._renderer.redraw(self._field, self._dices, self._secret_flag, self._needed_color,
-                                      self._current_color)
+            self._renderer.render(self._field, self._dices, self._current_color)
 
     def switch_turn(self):
         self.change_color()
         if not self.is_bot_move():
-            self._renderer.redraw(self._field, self._dices, self._secret_flag, self._needed_color,
-                                  self._current_color)
+            self._renderer.render(self._field, self._dices, self._current_color)
         self.throw_dices()
 
     def is_bot_move(self):

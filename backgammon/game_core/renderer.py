@@ -71,13 +71,8 @@ class Renderer:
         self.draw_checkers(field.points, field.pikes)
         self.draw_dices(dices, current_color)
 
-    def redraw(self, field, dices, secret_flag, needed_color, current_color):
-        if not secret_flag:
-            self.draw_field(field, dices, current_color)
-        else:
-            self.draw_field(field, dices, current_color)
-            needed_color.set_color(10, 5, 3)
-
+    def render(self, field, dices, current_color):
+        self.draw_field(field, dices, current_color)
         self.draw_turn_text(current_color)
         pygame.display.update()
 
