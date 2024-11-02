@@ -50,6 +50,10 @@ class Game:
         return self._field
 
     @property
+    def bot(self):
+        return self._bot
+
+    @property
     def current_color(self):
         return self._current_color
 
@@ -68,16 +72,8 @@ class Game:
         self.throw_dices()
 
         while self._winner == NONE:
-            if (not self._field.has_legal_move(self._dices, self._current_color) or
-                    (not self.is_bot_move() and len(self.dices) == 0)):
-                self.switch_turn()
-            elif self.is_bot_move():
-                moves = self._bot.get_moves(self._field, self._dices)
-                self._field.make_moves(moves)
-                self.switch_turn()
-            else:
-                self._event_handler.handle_game_events()
-                self._renderer.redraw(self._field, self._dices, self._secret_flag, self._needed_color,
+            self._event_handler.handle_game_events()
+            self._renderer.redraw(self._field, self._dices, self._secret_flag, self._needed_color,
                                       self._current_color)
 
     def switch_turn(self):
@@ -86,8 +82,6 @@ class Game:
             self._renderer.redraw(self._field, self._dices, self._secret_flag, self._needed_color,
                                   self._current_color)
         self.throw_dices()
-        self._renderer.redraw(self._field, self._dices, self._secret_flag, self._needed_color,
-                              self._current_color)
 
     def is_bot_move(self):
         return self._bot is not None and self._bot.color == self._current_color
@@ -99,7 +93,7 @@ class Game:
             EventHandler.wait_until_button_pressed(self._throw_dices_button)
         self._dices = [random.randint(1, 6), random.randint(1, 6)]
 
-    def make_move_by_mouse(self):
+    def make_player_move(self):
         if self._field.selected_end != -1:
             last_column_index = self._field.last_point_index[self._current_color]
             if self._field.selected_end == last_column_index:
@@ -108,7 +102,7 @@ class Game:
                     self._field.make_move(move)
                     self._field.selected = -1
                     self._field.selected_end = -1
-                    self._dices = []
+                    self._dices.clear()
                     return
 
             move = Move(self._field.selected, self._field.selected_end, self._current_color)
@@ -121,4 +115,5 @@ class Game:
                     self._field.make_move(move)
                     self._dices.clear()
                     self._field.selected = -1
+
         self._field.selected_end = -1

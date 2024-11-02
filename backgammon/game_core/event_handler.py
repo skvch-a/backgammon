@@ -1,23 +1,34 @@
 import pygame
 
 from ..buttons.button import Button
-from ..utils.move import Move
+
 
 class EventHandler:
     def __init__(self, game):
         self._game = game
 
-    def handle_game_events(self) -> None:
-        events = pygame.event.get()
-        self.check_for_quit(events)
-        self._game.update_current_dice()
-        self.select_pike(events)
-        self._game.make_move_by_mouse()
-
     def handle_menu_events(self, menu_buttons: list[Button]) -> int:
         events = pygame.event.get()
         self.check_for_quit(events)
         return self.get_pressed_button_index(events, menu_buttons)
+
+    def handle_game_events(self):
+        if (not self._game.field.has_legal_move(self._game.dices, self._game.current_color) or
+                (not self._game.is_bot_move() and len(self._game.dices) == 0)):
+            self._game.switch_turn()
+        elif self._game.is_bot_move():
+            moves = self._game.bot.get_moves(self._game.field, self._game.dices)
+            self._game.field.make_moves(moves)
+            self._game.switch_turn()
+        else:
+            self.handle_player_move()
+
+    def handle_player_move(self) -> None:
+        events = pygame.event.get()
+        self.check_for_quit(events)
+        self._game.update_current_dice()
+        self.select_pike(events)
+        self._game.make_player_move()
 
     def select_pike(self, events: list[pygame.event.Event]) -> None:
         for event in events:
@@ -52,7 +63,6 @@ class EventHandler:
     def get_pressed_button_index(events: list[pygame.event.Event], buttons: list[Button]) -> int:
         for event in events:
             if event.type == pygame.MOUSEBUTTONDOWN:
-
                 for button_index in range(len(buttons)):
                     if buttons[button_index].is_pressed(event.pos):
                         return button_index
