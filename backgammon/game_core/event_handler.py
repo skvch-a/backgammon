@@ -1,7 +1,5 @@
 import pygame
-from random import randint
 
-from ..bots.smart_bot import SmartBot
 from ..buttons.button import Button
 from ..constants import WHITE, BLACK, CHECKERS_COUNT
 
@@ -24,45 +22,33 @@ class EventHandler:
         return self.get_pressed_button_index(events, menu_buttons)
 
     def handle_game_events(self):
-        print(self._is_white_endgame, self._is_black_endgame)
         if self.is_endgame_for_white() and self._game.current_color == WHITE:
             self._is_white_endgame = True
-            for _ in range(2):
-                self.pop_random_checker(18, 23, WHITE)
-            pygame.time.wait(1000)
+            self.pop_checkers(WHITE)
             self._game.switch_turn()
             return
 
         if self.is_endgame_for_black() and self._game.current_color == BLACK:
             self._is_black_endgame = True
-            for _ in range(2):
-                self.pop_random_checker(6, 11, BLACK)
-            pygame.time.wait(1000)
+            self.pop_checkers(BLACK)
             self._game.switch_turn()
             return
 
-
-        if (not self._game.field.has_legal_move(self._game.dices, self._game.current_color) or
-                (not self._game.is_bot_move() and len(self._game.dices) == 0)):
-            self._game.switch_turn()
-        elif self._game.is_bot_move():
+        if self._game.is_bot_move():
             moves = self._game.bot.get_moves(self._game.field, self._game.dices)
             self._game.field.make_moves(moves)
-            self._game.switch_turn()
         else:
-            # self.handle_player_move()
-            bob = SmartBot(WHITE)
-            moves = bob.get_moves(self._game.field, self._game.dices)
-            self._game.field.make_moves(moves)
-            self._game.switch_turn()
-            pygame.time.wait(200)
+            self.handle_player_move()
+        self._game.switch_turn()
 
     def handle_player_move(self) -> None:
-        events = pygame.event.get()
-        self.check_for_quit(events)
-        self._game.update_current_dice()
-        self.select_pike(events)
-        self._game.make_player_move()
+        while self._game.field.has_legal_move(self._game.dices, self._game.current_color) or len(self._game.dices) != 0:
+            events = pygame.event.get()
+            self.check_for_quit(events)
+            self._game.update_current_dice()
+            self.select_pike(events)
+            self._game.make_player_move()
+            self._game.render()
 
     def select_pike(self, events: list[pygame.event.Event]) -> None:
         for event in events:
@@ -75,17 +61,22 @@ class EventHandler:
                 elif event.button == 3:
                     self._game.field.selected_end = selected
 
-
-    def pop_random_checker(self, start, end, color):
-        rand = randint(start, end)
-        check = self._game.field.points[rand].pop()
-
-        if check == WHITE:
-            self._white_off_board_count += 1
-            print('попнули белизну')
-        if check == BLACK:
-            self._black_off_board_count += 1
-            print('попнули черноту')
+    def pop_checkers(self, color):
+        if color == WHITE:
+            last_idx = 24
+        else:
+            last_idx = 12
+        pop_idx_1 = last_idx - self._game.dices[0]
+        pop_idx_2 = last_idx - self._game.dices[1]
+        for pop_idx in [pop_idx_1, pop_idx_2]:
+            check = self._game.field.points[pop_idx].peek()
+            if check == color:
+                self._game.field.points[pop_idx].pop()
+                if color == WHITE:
+                    self._white_off_board_count += 1
+                elif color == BLACK:
+                    self._black_off_board_count += 1
+        self._game.dices.clear()
 
     def is_endgame_for_white(self):
         return self._is_white_endgame or self._is_endgame_for(18, 23, WHITE)

@@ -4,7 +4,7 @@ import pygame
 
 from ..bots.bot import Bot
 from ..buttons.button import Button
-from ..constants import NONE, WHITE, MUSIC_PATH, THROW_DICES_BUTTON_PATH
+from ..constants import MUSIC_PATH, THROW_DICES_BUTTON_PATH
 from ..game_core.event_handler import EventHandler
 from ..game_core.menu import Menu
 from ..game_core.renderer import Renderer
@@ -52,17 +52,20 @@ class Game:
     def current_color(self):
         return self._current_color
 
+    def render(self):
+        self._renderer.render(self._field, self._dices, self._current_color)
+
     def run(self):
         pygame.mixer.music.load(MUSIC_PATH)
         pygame.mixer.music.play(-1)
 
         self._bot: Bot = self._menu.choose_game_mode()
-        self._renderer.render(self._field, self._dices, self._current_color)
+        self.render()
         self.throw_dices()
 
         while not self._event_handler.is_over:
             self._event_handler.handle_game_events()
-            self._renderer.render(self._field, self._dices, self._current_color)
+            self.render()
 
 
     def update_current_dice(self):
@@ -74,14 +77,14 @@ class Game:
     def switch_turn(self):
         self.change_color()
         if not self.is_bot_move():
-            self._renderer.render(self._field, self._dices, self._current_color)
+            self.render()
         self.throw_dices()
 
     def is_bot_move(self):
         return self._bot is not None and self._bot.color == self._current_color
 
     def throw_dices(self):
-        if not self.is_bot_move() and False:
+        if not self.is_bot_move():
             self._renderer.draw_buttons(self._throw_dices_button)
             pygame.display.update()
             EventHandler.wait_until_button_pressed(self._throw_dices_button)

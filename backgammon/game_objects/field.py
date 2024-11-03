@@ -50,7 +50,6 @@ class Field:
 
     def make_move(self, move):
         if self.is_move_correct(move):
-            print(f'{move.color} ход из {move.start} в {move.end}')
             self.points[move.end].push(self.points[move.start].pop())
 
     def is_move_correct(self, move, dice=None):
