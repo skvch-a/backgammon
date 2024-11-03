@@ -30,10 +30,10 @@ class EventHandler:
                 logging.info("HOTSEAT mode selected.")
                 return
             elif pressed_button_index == 1:
-                logging.info("STUPID-BOT mode selected.")
+                logging.info("STUPID_BOT mode selected.")
                 return StupidBot()
             elif pressed_button_index == 2:
-                logging.info("SMART-BOT mode selected.")
+                logging.info("SMART_BOT mode selected.")
                 return SmartBot()
 
     def check_for_menu_buttons_pressed(self, menu_buttons: list[Button]) -> int:
@@ -48,12 +48,12 @@ class EventHandler:
             logging.info('Black move.')
         logging.info(f'Dices: {self._game.dices}.')
 
-        if self.is_endgame_for_white() and self._game.current_color == WHITE:
+        if self._is_endgame_for_white() and self._game.current_color == WHITE:
             self._is_white_endgame = True
-            self.pop_checkers(WHITE)
-        elif self.is_endgame_for_black() and self._game.current_color == BLACK:
+            self._pop_checkers(WHITE)
+        elif self._is_endgame_for_black() and self._game.current_color == BLACK:
             self._is_black_endgame = True
-            self.pop_checkers(BLACK)
+            self._pop_checkers(BLACK)
         elif self._game.is_bot_move():
             moves = self._game.bot.get_moves(self._game.field, self._game.dices)
             logging.info(f"Bot move: {moves}")
@@ -82,7 +82,7 @@ class EventHandler:
                 elif event.button == 3:
                     self._game.field.selected_end = selected
 
-    def pop_checkers(self, color):
+    def _pop_checkers(self, color):
         if color == WHITE:
             last_idx = 24
         else:
@@ -100,10 +100,10 @@ class EventHandler:
                     self._black_off_board_count += 1
         self._game.dices.clear()
 
-    def is_endgame_for_white(self):
+    def _is_endgame_for_white(self):
         return self._is_white_endgame or self._is_endgame_for(18, 23, WHITE)
 
-    def is_endgame_for_black(self):
+    def _is_endgame_for_black(self):
         return self._is_black_endgame or self._is_endgame_for(6, 11, BLACK)
 
     def _is_endgame_for(self, start_opponent_house_index, end_opponent_house_index, color):
