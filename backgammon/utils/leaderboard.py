@@ -1,9 +1,10 @@
+import os
 import json
 
 
 class Leaderboard:
     def __init__(self):
-        self._path = 'leaderboard.json'
+        self._path = os.path.join(os.path.dirname(__file__), 'leaderboard.json')
         self._records = self._load_records()
 
     @property

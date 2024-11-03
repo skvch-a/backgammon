@@ -94,5 +94,5 @@ class Renderer:
     def _get_dice_sprites():
         dice_sprites = []
         for i in range(1, 7):
-            dice_sprites.append(get_image(f"assets/images/dice_{i}.png", DICE_SIZE))
+            dice_sprites.append(get_image(f"backgammon/assets/images/dice_{i}.png", DICE_SIZE))
         return dice_sprites
