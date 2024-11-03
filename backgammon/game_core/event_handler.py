@@ -63,7 +63,7 @@ class EventHandler:
         self._game.switch_turn()
 
     def handle_player_move(self) -> None:
-        while self._game.field.has_legal_move(self._game.dices, self._game.current_color) or len(self._game.dices) != 0:
+        while self._game.field.has_legal_move(self._game.dices, self._game.current_color) and len(self._game.dices) != 0:
             events = pygame.event.get()
             self.check_for_quit(events)
             self.select_pike(events)
