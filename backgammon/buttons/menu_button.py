@@ -1,6 +1,6 @@
 from pygame import Rect
 
-from ..buttons import Button
+from .button import Button
 from ..constants import MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT
 
 

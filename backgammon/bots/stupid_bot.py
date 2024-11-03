@@ -1,5 +1,5 @@
+from .bot import Bot
 from ..constants import BLACK
-from ..bots import Bot
 from ..utils import Move
 
 
