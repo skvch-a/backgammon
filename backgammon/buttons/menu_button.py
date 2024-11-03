@@ -1,7 +1,7 @@
 from pygame import Rect
 
-from backgammon.buttons.button import Button
-from backgammon.constants import MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT
+from ..buttons import Button
+from ..constants import MENU_BUTTON_WIDTH, MENU_BUTTON_HEIGHT
 
 
 class MenuButton(Button):

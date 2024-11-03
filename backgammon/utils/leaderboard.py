@@ -1,5 +1,6 @@
 import json
 
+
 class Leaderboard:
     def __init__(self):
         self._path = 'leaderboard.json'

@@ -1,5 +1,5 @@
 import pygame
-from backgammon.utils.render_utils import get_image
+from ..utils import get_image
 
 
 class Button:

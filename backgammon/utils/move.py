@@ -1,4 +1,4 @@
-from backgammon.constants import BLACK, WHITE
+from ..constants import BLACK, WHITE
 
 
 class Move:

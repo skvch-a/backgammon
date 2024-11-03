@@ -1,7 +1,7 @@
 import abc
 
-from backgammon.game_objects.field import Field
-from backgammon.utils.move import Move
+from ..game_objects import Field
+from ..utils import Move
 
 class Bot(abc.ABC):
     def __init__(self, color):

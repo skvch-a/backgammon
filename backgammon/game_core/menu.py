@@ -1,7 +1,7 @@
 import pygame
 
 from ..constants import HOTSEAT_BUTTON_PATH, STUPID_BOT_BUTTON_PATH, SMART_BOT_BUTTON_PATH
-from ..buttons.menu_button import MenuButton
+from ..buttons import MenuButton
 
 
 class Menu:

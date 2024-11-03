@@ -1,8 +1,8 @@
 from ..constants import WHITE, BLACK, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_POSSIBLE_MOVE_COLOR, \
     PIKE_DEFAULT_COLOR, FIELD_POS
-from ..game_objects.pike import Pike
-from ..game_objects.point import Point
-from ..utils.move import Move
+
+from ..game_objects import Pike, Point
+from ..utils import Move
 
 class Field:
     def __init__(self):

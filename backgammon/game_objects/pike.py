@@ -1,4 +1,4 @@
-from backgammon.constants import PIKE_DEFAULT_COLOR, CHECKER_HALF_SIZE, PIKE_WIDTH, PIKE_BASE_HEIGHT
+from ..constants import PIKE_DEFAULT_COLOR, CHECKER_HALF_SIZE, PIKE_WIDTH, PIKE_BASE_HEIGHT
 
 
 class Pike:

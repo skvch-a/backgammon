@@ -1,5 +1,5 @@
 from pygame import transform, image, Rect
-from backgammon.constants import FIELD_POS
+from ..constants import FIELD_POS
 
 
 def get_image(path, size):

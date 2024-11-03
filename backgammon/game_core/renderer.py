@@ -1,7 +1,7 @@
 import pygame
 
-from backgammon.constants import *
-from backgammon.utils.render_utils import get_image, get_dices_box_rect
+from ..constants import *
+from ..utils import get_image, get_dices_box_rect
 
 
 class Renderer:

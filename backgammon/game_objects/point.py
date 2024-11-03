@@ -1,4 +1,4 @@
-from backgammon.constants import WHITE, BLACK, NONE
+from ..constants import WHITE, BLACK, NONE
 
 
 class Point:

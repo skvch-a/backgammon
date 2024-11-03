@@ -1,10 +1,9 @@
 import pygame
 import logging
 
-from ..bots.smart_bot import SmartBot
-from ..bots.stupid_bot import StupidBot
-from ..buttons.button import Button
 from ..constants import WHITE, BLACK, CHECKERS_COUNT
+from ..bots import Bot, SmartBot, StupidBot
+from ..buttons import Button
 
 
 class EventHandler:
@@ -15,7 +14,7 @@ class EventHandler:
         self._white_off_board_count = 0
         self._black_off_board_count = 0
 
-    def get_winner(self):
+    def get_winner(self) -> int:
         if self._white_off_board_count == CHECKERS_COUNT:
             logging.info("WINNER REQUESTED - White wins.")
             return WHITE
@@ -23,7 +22,7 @@ class EventHandler:
             logging.info("WINNER REQUESTED - Black wins.")
             return BLACK
 
-    def choose_game_mode(self, menu_buttons):
+    def choose_game_mode(self, menu_buttons) -> Bot | None:
         while True:
             pressed_button_index = self.check_for_menu_buttons_pressed(menu_buttons)
             if pressed_button_index == 0:

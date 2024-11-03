@@ -2,15 +2,11 @@ import random
 import pygame
 
 from ..constants import MUSIC_PATH, THROW_DICES_BUTTON_PATH, CHECKERS_COUNT
-from ..bots.bot import Bot
-from ..buttons.button import Button
-from ..game_core.event_handler import EventHandler
-from ..game_core.menu import Menu
-from ..game_core.renderer import Renderer
-from ..game_objects.field import Field
-from ..utils.render_utils import get_dices_box_rect
-from ..utils.leaderboard import Leaderboard
-from ..utils.move import Move
+from ..bots import Bot
+from ..buttons import Button
+from ..game_core import EventHandler, Menu, Renderer
+from ..game_objects import Field
+from ..utils import Move, Leaderboard, get_dices_box_rect
 
 
 class Game:

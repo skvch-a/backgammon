@@ -1,6 +1,6 @@
-from backgammon.constants import BLACK
-from backgammon.bots.bot import Bot
-from backgammon.utils.move import Move
+from ..constants import BLACK
+from ..bots import Bot
+from ..utils import Move
 
 
 class StupidBot(Bot):
