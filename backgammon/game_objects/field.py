@@ -2,7 +2,6 @@ from ..constants import WHITE, BLACK, CHECKERS_COUNT, PIKE_SELECTED_COLOR, PIKE_
     PIKE_DEFAULT_COLOR, FIELD_POS
 from ..game_objects.pike import Pike
 from ..game_objects.point import Point
-from ..utils.help_utils import is_move_correct
 from ..utils.move import Move
 
 class Field:
@@ -97,10 +96,10 @@ class Field:
             if selected == i:
                 selected_set.add(i)
                 for j in dices:
-                    if not is_move_correct(i, (i + j) % 24, self.points[selected].peek()):
+                    if not Move.is_correct(i, (i + j) % 24, self.points[selected].peek()):
                         continue
                     possible_moves.add((i + j) % 24)
-                if is_move_correct(i, (i + sum(dices)) % 24, self.points[selected].peek()):
+                if Move.is_correct(i, (i + sum(dices)) % 24, self.points[selected].peek()):
                     possible_moves.add((i + sum(dices)) % 24)
         return possible_moves, selected_set
 

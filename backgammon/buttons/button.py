@@ -1,6 +1,6 @@
 import pygame
 
-from backgammon.utils.help_utils import get_image
+from backgammon.utils.render_utils import get_image
 
 class Button:
     def __init__(self, rect: pygame.Rect, image_path: str):

@@ -1,7 +1,7 @@
 import pygame
 
 from backgammon.constants import *
-from backgammon.utils.help_utils import get_image, get_dices_box_rect
+from backgammon.utils.render_utils import get_image, get_dices_box_rect
 
 
 class Renderer:
@@ -16,6 +16,7 @@ class Renderer:
         self._throw_dices_button_image = pygame.image.load(THROW_DICES_BUTTON_PATH)
         self._white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
         self._black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
+        self.menu_bg = get_image(MENU_BG_PATH, SCREEN_SIZE)
 
     def render(self, field, dices, current_color, winner=None):
         self._draw_field(field, dices, current_color)
@@ -25,8 +26,8 @@ class Renderer:
             self._draw_turn_text(current_color)
         pygame.display.update()
 
-    def draw_menu_background(self, background_image):
-        self._screen.blit(background_image, (0, 0))
+    def draw_menu_background(self):
+        self._screen.blit(self.menu_bg, (0, 0))
 
     def draw_buttons(self, *buttons):
         for button in buttons:

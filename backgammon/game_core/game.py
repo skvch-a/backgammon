@@ -10,7 +10,7 @@ from ..game_core.menu import Menu
 from ..game_core.renderer import Renderer
 from ..game_objects.field import Field
 from ..game_objects.point import Point
-from ..utils.help_utils import get_dices_box_rect
+from ..utils.render_utils import get_dices_box_rect
 from ..utils.move import Move
 
 

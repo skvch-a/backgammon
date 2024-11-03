@@ -27,7 +27,7 @@ class NerdsTests(unittest.TestCase):
         return field
 
     def _check_move(self, field, move, dice, expected):
-        actual = field.is_move_correct(move, dice)
+        actual = field.Move.is_correct(move, dice)
         self.assertEqual(expected, actual)
 
     def test_correct_move(self):
