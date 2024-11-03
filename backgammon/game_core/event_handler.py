@@ -44,10 +44,10 @@ class EventHandler:
 
     def handle_game_events(self):
         if self._game.current_color == WHITE:
-            logging.info(f'White move.')
+            logging.info('White move.')
         else:
             logging.info('Black move.')
-        logging.info(F'Dices: {self._game.dices}.')
+        logging.info(f'Dices: {self._game.dices}.')
 
         if self.is_endgame_for_white() and self._game.current_color == WHITE:
             self._is_white_endgame = True
