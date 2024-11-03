@@ -27,12 +27,16 @@ class Renderer:
             self._screen.blit(self._dice_sprites[dice_index - 1], (rect.x + indent * 60 + 10, rect.y + 10))
             indent += 1
 
-    def draw_text(self, text, pos):
+    def _draw_text(self, text, pos):
         self._screen.blit(self._font.render(text, True, (81, 179, 41)), pos)
 
     def draw_turn_text(self, current_color):
         colors = ("Black", "White")
-        self.draw_text(f"{colors[current_color]} Aliens turn", (320, 30))
+        self._draw_text(f"{colors[current_color]} Aliens turn", (320, 30))
+
+    def draw_win_text(self, current_color):
+        colors = ("BLACK", "WHITE")
+        self._draw_text(f"{colors[current_color]} ALIENS WIN!!!", (310, 30))
 
     def draw_menu_background(self, background_image):
         self._screen.blit(background_image, (0, 0))
@@ -71,9 +75,12 @@ class Renderer:
         self.draw_checkers(field.points, field.pikes)
         self.draw_dices(dices, current_color)
 
-    def render(self, field, dices, current_color):
+    def render(self, field, dices, current_color, winner=None):
         self.draw_field(field, dices, current_color)
-        self.draw_turn_text(current_color)
+        if winner is not None:
+            self.draw_win_text(winner)
+        else:
+            self.draw_turn_text(current_color)
         pygame.display.update()
 
     @staticmethod

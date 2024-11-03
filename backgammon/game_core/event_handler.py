@@ -12,9 +12,11 @@ class EventHandler:
         self._white_off_board_count = 0
         self._black_off_board_count = 0
 
-    @property
-    def is_over(self):
-        return self._white_off_board_count == CHECKERS_COUNT or self._black_off_board_count == CHECKERS_COUNT
+    def get_winner(self):
+        if self._white_off_board_count == CHECKERS_COUNT:
+            return WHITE
+        if self._black_off_board_count == CHECKERS_COUNT:
+            return BLACK
 
     def handle_menu_events(self, menu_buttons: list[Button]) -> int:
         events = pygame.event.get()

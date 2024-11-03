@@ -52,8 +52,8 @@ class Game:
     def current_color(self):
         return self._current_color
 
-    def render(self):
-        self._renderer.render(self._field, self._dices, self._current_color)
+    def render(self, winner=None):
+        self._renderer.render(self._field, self._dices, self._current_color, winner)
 
     def run(self):
         pygame.mixer.music.load(MUSIC_PATH)
@@ -63,9 +63,13 @@ class Game:
         self.render()
         self.throw_dices()
 
-        while not self._event_handler.is_over:
+        while self._event_handler.get_winner() is None:
             self._event_handler.handle_game_events()
             self.render()
+
+        self.render(self._event_handler.get_winner())
+        while True:
+            self._event_handler.check_for_quit(pygame.event.get())
 
 
     def update_current_dice(self):
