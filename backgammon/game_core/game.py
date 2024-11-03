@@ -8,7 +8,6 @@ from ..game_core.event_handler import EventHandler
 from ..game_core.menu import Menu
 from ..game_core.renderer import Renderer
 from ..game_objects.field import Field
-from ..game_objects.point import Point
 from ..utils.render_utils import get_dices_box_rect
 from ..utils.move import Move
 
@@ -27,9 +26,6 @@ class Game:
         self._selected_pike = 0
         self._throw_dices_button = Button(get_dices_box_rect(), THROW_DICES_BUTTON_PATH)
         self._bot = None
-        self._field.points = [Point(i) for i in
-                              [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], [], [], [], [], [], [], [], [], [], [], [],
-                               [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [], [], [], [], [], [], [], [], [], [], []]]
 
     @property
     def current_dice(self):
@@ -51,9 +47,6 @@ class Game:
     def current_color(self):
         return self._current_color
 
-    def render(self, winner=None):
-        self._renderer.render(self._field, self._dices, self._current_color, winner)
-
     def run(self):
         pygame.mixer.music.load(MUSIC_PATH)
         pygame.mixer.music.play(-1)
@@ -70,6 +63,8 @@ class Game:
         while True:
             self._event_handler.check_for_quit(pygame.event.get())
 
+    def render(self, winner=None):
+        self._renderer.render(self._field, self._dices, self._current_color, winner)
 
     def update_current_dice(self):
         self._current_dice %= len(self.dices)

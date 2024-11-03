@@ -1,8 +1,12 @@
 import pygame
+import logging
 
+from ..bots.smart_bot import SmartBot
+from ..bots.stupid_bot import StupidBot
 from ..buttons.button import Button
 from ..constants import WHITE, BLACK, CHECKERS_COUNT
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class EventHandler:
     def __init__(self, game):
@@ -14,16 +18,36 @@ class EventHandler:
 
     def get_winner(self):
         if self._white_off_board_count == CHECKERS_COUNT:
+            logging.info("WINNER REQUESTED - White wins.")
             return WHITE
         if self._black_off_board_count == CHECKERS_COUNT:
+            logging.info("WINNER REQUESTED - Black wins.")
             return BLACK
 
-    def handle_menu_events(self, menu_buttons: list[Button]) -> int:
+    def choose_game_mode(self, menu_buttons):
+        while True:
+            pressed_button_index = self.check_for_menu_buttons_pressed(menu_buttons)
+            if pressed_button_index == 0:
+                logging.info("HOTSEAT mode selected.")
+                return
+            elif pressed_button_index == 1:
+                logging.info("STUPID-BOT mode selected.")
+                return StupidBot()
+            elif pressed_button_index == 2:
+                logging.info("SMART-BOT mode selected.")
+                return SmartBot()
+
+    def check_for_menu_buttons_pressed(self, menu_buttons: list[Button]) -> int:
         events = pygame.event.get()
         self.check_for_quit(events)
         return self.get_pressed_button_index(events, menu_buttons)
 
     def handle_game_events(self):
+        if self._game.current_color == WHITE:
+            logging.info('White move.')
+        else:
+            logging.info('Black move.')
+
         if self.is_endgame_for_white() and self._game.current_color == WHITE:
             self._is_white_endgame = True
             self.pop_checkers(WHITE)
@@ -38,6 +62,7 @@ class EventHandler:
 
         if self._game.is_bot_move():
             moves = self._game.bot.get_moves(self._game.field, self._game.dices)
+            logging.info(f"Bot move: {moves}")
             self._game.field.make_moves(moves)
         else:
             self.handle_player_move()
@@ -72,6 +97,7 @@ class EventHandler:
         pop_idx_2 = last_idx - self._game.dices[1]
         for pop_idx in [pop_idx_1, pop_idx_2]:
             check = self._game.field.points[pop_idx].peek()
+            logging.info(f"{color} checker removed from position {pop_idx}.")
             if check == color:
                 self._game.field.points[pop_idx].pop()
                 if color == WHITE:
@@ -99,6 +125,7 @@ class EventHandler:
     def check_for_quit(events: list[pygame.event.Event]) -> None:
         for event in events:
             if event.type == pygame.QUIT:
+                logging.info("Game quit by player.")
                 pygame.quit()
                 exit()
 
@@ -117,6 +144,7 @@ class EventHandler:
             events = pygame.event.get()
             for event in events:
                 if event.type == pygame.QUIT:
+                    logging.info("Game quit by player.")
                     pygame.quit()
                     exit()
                 if event.type == pygame.MOUSEBUTTONDOWN and button.is_pressed(event.pos):
