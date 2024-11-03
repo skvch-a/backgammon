@@ -1,11 +1,13 @@
 import pygame
 
+from .renderer import Renderer
+from .event_handler import EventHandler
 from ..constants import HOTSEAT_BUTTON_PATH, STUPID_BOT_BUTTON_PATH, SMART_BOT_BUTTON_PATH
 from ..buttons import MenuButton
 
 
 class Menu:
-    def __init__(self, event_handler, renderer, records):
+    def __init__(self, event_handler: EventHandler, renderer: Renderer, records: dict):
         self._event_handler = event_handler
         self._renderer = renderer
         self._menu_buttons = []
