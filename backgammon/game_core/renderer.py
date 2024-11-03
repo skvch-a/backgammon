@@ -17,7 +17,22 @@ class Renderer:
         self._white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
         self._black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
 
-    def draw_dices(self, dices, current_color):
+    def render(self, field, dices, current_color, winner=None):
+        self._draw_field(field, dices, current_color)
+        if winner is not None:
+            self._draw_win_text(winner)
+        else:
+            self._draw_turn_text(current_color)
+        pygame.display.update()
+
+    def draw_menu_background(self, background_image):
+        self._screen.blit(background_image, (0, 0))
+
+    def draw_buttons(self, *buttons):
+        for button in buttons:
+            button.draw(self._screen)
+
+    def _draw_dices(self, dices, current_color):
         rect = self._dices_box_rect
         rect_color = (255, 255, 255) if current_color == WHITE else (0, 0, 0)
         pygame.draw.rect(self._screen, rect_color, rect)
@@ -30,58 +45,43 @@ class Renderer:
     def _draw_text(self, text, pos):
         self._screen.blit(self._font.render(text, True, (81, 179, 41)), pos)
 
-    def draw_turn_text(self, current_color):
+    def _draw_turn_text(self, current_color):
         colors = ("Black", "White")
         self._draw_text(f"{colors[current_color]} Aliens turn", (320, 30))
 
-    def draw_win_text(self, current_color):
+    def _draw_win_text(self, current_color):
         colors = ("BLACK", "WHITE")
         self._draw_text(f"{colors[current_color]} ALIENS WIN!!!", (310, 30))
 
-    def draw_menu_background(self, background_image):
-        self._screen.blit(background_image, (0, 0))
-
-    def draw_buttons(self, *buttons):
-        for button in buttons:
-            button.draw(self._screen)
-
-    def draw_checker(self, checker_color, checker_number, pike):
+    def _draw_checker(self, checker_color, checker_number, pike):
         image = self._white_checker_image if checker_color == WHITE else self._black_checker_image
         self._screen.blit(image, pike.get_checker_position(checker_number))
 
-    def draw_checkers(self, points, pikes):
+    def _draw_checkers(self, points, pikes):
         for point, pike in zip(points, pikes):
             for checker_number in range(point.count):
-                self.draw_checker(point.peek(), checker_number, pike)
+                self._draw_checker(point.peek(), checker_number, pike)
 
-    def draw_game_bg(self):
+    def _draw_game_bg(self):
         self._screen.blit(self._game_bg, (0, 0))
 
-    def draw_field_bg(self):
+    def _draw_field_bg(self):
         self._screen.blit(self._field_image, FIELD_POS)
 
-    def draw_pike(self, pike):
+    def _draw_pike(self, pike):
         pygame.draw.polygon(self._screen, pike.color, pike.vertices)
 
-    def draw_pikes(self, pikes):
+    def _draw_pikes(self, pikes):
         for pike in pikes:
-            self.draw_pike(pike)
+            self._draw_pike(pike)
 
-    def draw_field(self, field, dices, current_color):
-        self.draw_game_bg()
-        self.draw_field_bg()
+    def _draw_field(self, field, dices, current_color):
+        self._draw_game_bg()
+        self._draw_field_bg()
         field.recolor_pikes(dices)
-        self.draw_pikes(field.pikes)
-        self.draw_checkers(field.points, field.pikes)
-        self.draw_dices(dices, current_color)
-
-    def render(self, field, dices, current_color, winner=None):
-        self.draw_field(field, dices, current_color)
-        if winner is not None:
-            self.draw_win_text(winner)
-        else:
-            self.draw_turn_text(current_color)
-        pygame.display.update()
+        self._draw_pikes(field.pikes)
+        self._draw_checkers(field.points, field.pikes)
+        self._draw_dices(dices, current_color)
 
     @staticmethod
     def _get_dice_sprites():
