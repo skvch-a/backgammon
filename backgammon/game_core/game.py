@@ -58,7 +58,8 @@ class Game:
         while True:
             self._event_handler.check_for_quit(pygame.event.get())
 
-    def render(self, winner=None):
+    def render(self, winner=None) -> None:
+        """ Отрисовывает игру, включая интерфейс """
         self._renderer.render(self._field, self._dices, self._current_color, winner)
 
     def change_color(self):

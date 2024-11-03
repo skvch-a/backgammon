@@ -12,6 +12,7 @@ class Leaderboard:
         return self._records
 
     def update(self, bot_name, points):
+        """Проверяет на рекорд, сохраняет в файл, если это так"""
         if points > self._records[bot_name]:
             self._records[bot_name] = points
             self._save_records()

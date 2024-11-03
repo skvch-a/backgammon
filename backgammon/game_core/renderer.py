@@ -19,6 +19,7 @@ class Renderer:
         self.menu_bg = get_image(MENU_BG_PATH, SCREEN_SIZE)
 
     def render(self, field, dices, current_color, winner=None):
+        """Отрисовывает игру, включая интерфейс"""
         self._draw_field(field, dices, current_color)
         if winner is not None:
             self._draw_win_text(winner)

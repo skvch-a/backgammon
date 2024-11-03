@@ -14,7 +14,7 @@ class EventHandler:
         self._white_off_board_count = 0
         self._black_off_board_count = 0
 
-    def get_winner(self) -> int:
+    def get_winner(self) -> int | None:
         if self._white_off_board_count == CHECKERS_COUNT:
             logging.info("WINNER REQUESTED - White wins.")
             return WHITE
@@ -23,8 +23,15 @@ class EventHandler:
             return BLACK
 
     def choose_game_mode(self, menu_buttons) -> Bot | None:
+        """Позволяет игроку выбрать режим игры
+
+        Args:
+            menu_buttons: Кнопки меню
+        Returns:
+            Bot | None: Экземпляр выбранного бота или None (в случае режима HOTSEAT)
+        """
         while True:
-            pressed_button_index = self.check_for_menu_buttons_pressed(menu_buttons)
+            pressed_button_index = self.check_for_buttons_pressed(menu_buttons)
             if pressed_button_index == 0:
                 logging.info("HOTSEAT mode selected.")
                 return
@@ -35,10 +42,15 @@ class EventHandler:
                 logging.info("SMART_BOT mode selected.")
                 return SmartBot()
 
-    def check_for_menu_buttons_pressed(self, menu_buttons: list[Button]) -> int:
+    def check_for_buttons_pressed(self, buttons : list[Button]) -> int | None:
+        """Проверяет нажаты ли кнопки, и возвращает индекс нажатой"""
         events = pygame.event.get()
         self.check_for_quit(events)
-        return self.get_pressed_button_index(events, menu_buttons)
+        for event in events:
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for button_index in range(len(buttons)):
+                    if buttons[button_index].is_pressed(event.pos):
+                        return button_index
 
     def handle_game_events(self):
         if self._game.current_color == WHITE:
@@ -81,7 +93,12 @@ class EventHandler:
                 elif event.button == 3:
                     self._game.field.selected_end = selected
 
-    def _pop_checkers(self, color):
+    def _pop_checkers(self, color) -> None:
+        """Выводит фишки с доски
+
+        Args:
+            color: Цвет шашек, которые нужно удалить
+        """
         if color == WHITE:
             last_idx = 24
         else:
@@ -99,10 +116,12 @@ class EventHandler:
                     self._black_off_board_count += 1
         self._game.dices.clear()
 
-    def _is_endgame_for_white(self):
+    def _is_endgame_for_white(self) -> bool:
+        """Проверяет, можно ли выводить фишки с доски белым"""
         return self._is_white_endgame or self._is_endgame_for(18, 23, WHITE)
 
     def _is_endgame_for_black(self):
+        """"Проверяет, можно ли выводить фишки с доски черным"""
         return self._is_black_endgame or self._is_endgame_for(6, 11, BLACK)
 
     def _is_endgame_for(self, start_opponent_house_index, end_opponent_house_index, color):
@@ -123,15 +142,8 @@ class EventHandler:
                 exit()
 
     @staticmethod
-    def get_pressed_button_index(events: list[pygame.event.Event], buttons: list[Button]) -> int:
-        for event in events:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                for button_index in range(len(buttons)):
-                    if buttons[button_index].is_pressed(event.pos):
-                        return button_index
-
-    @staticmethod
     def wait_until_button_pressed(button) -> None:
+        """Ожидает нажатия заданной кнопки"""
         is_pressed = False
         while not is_pressed:
             events = pygame.event.get()
