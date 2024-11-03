@@ -1,7 +1,7 @@
 import random
 import pygame
 
-from ..constants import MUSIC_PATH, THROW_DICES_BUTTON_PATH
+from ..constants import MUSIC_PATH, THROW_DICES_BUTTON_PATH, CHECKERS_COUNT
 from ..bots.bot import Bot
 from ..buttons.button import Button
 from ..game_core.event_handler import EventHandler
@@ -9,27 +9,24 @@ from ..game_core.menu import Menu
 from ..game_core.renderer import Renderer
 from ..game_objects.field import Field
 from ..utils.render_utils import get_dices_box_rect
+from ..utils.leaderboard import Leaderboard
 from ..utils.move import Move
 
 
 class Game:
     def __init__(self):
         pygame.init()
+        self._leaderboard = Leaderboard()
         self._renderer = Renderer()
-        self._event_handler = EventHandler(self)
         self._field = Field()
-        self._menu = Menu(self._event_handler, self._renderer)
-        self._current_dice = -1
+        self._event_handler = EventHandler(self)
+        self._menu = Menu(self._event_handler, self._renderer, self._leaderboard.records)
         self._dices = []
         self._is_endgame = False
         self._current_color = 1
         self._selected_pike = 0
         self._throw_dices_button = Button(get_dices_box_rect(), THROW_DICES_BUTTON_PATH)
         self._bot = None
-
-    @property
-    def current_dice(self):
-        return self._current_dice
 
     @property
     def dices(self):
@@ -60,14 +57,13 @@ class Game:
             self.render()
 
         self.render(self._event_handler.get_winner())
+        if self.bot is not None:
+            self._leaderboard.update(self._bot.name, CHECKERS_COUNT - self._field.checkers_count)
         while True:
             self._event_handler.check_for_quit(pygame.event.get())
 
     def render(self, winner=None):
         self._renderer.render(self._field, self._dices, self._current_color, winner)
-
-    def update_current_dice(self):
-        self._current_dice %= len(self.dices)
 
     def change_color(self):
         self._current_color = (self._current_color + 1) % 2

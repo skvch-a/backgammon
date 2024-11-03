@@ -11,6 +11,11 @@ class Bot(abc.ABC):
     def color(self):
         return self._color
 
+    @property
+    @abc.abstractmethod
+    def name(self) -> str:
+        pass
+
     @abc.abstractmethod
     def get_moves(self, field: Field, dices: list) -> list[Move]:
         pass

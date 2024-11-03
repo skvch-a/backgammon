@@ -9,6 +9,10 @@ class SmartBot(Bot):
     def __init__(self, color=BLACK):
         super().__init__(color)
 
+    @property
+    def name(self):
+        return 'High IQ Alien'
+
     def get_moves(self, field, dices):
         points_numbers = list(range(23))
         dices_variations = [0, 1, 2]

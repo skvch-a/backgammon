@@ -7,6 +7,10 @@ class StupidBot(Bot):
     def __init__(self, color=BLACK):
         super().__init__(color)
 
+    @property
+    def name(self):
+        return 'Low IQ Alien'
+
     def get_moves(self, field, dices):
         moves = []
         for col in range(23, -1, -1):

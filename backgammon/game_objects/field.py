@@ -23,7 +23,14 @@ class Field:
             self.pikes.append(Pike(pos[0], pos[1], self._get_pike_type(i)))
         for i, pos in enumerate(self.position_down):
             self.pikes.append(Pike(pos[0], pos[1], self._get_pike_type(i), True))
-            
+
+    @property
+    def checkers_count(self):
+        count = 0
+        for point in self.points:
+            count += point.count
+        return count
+
     def recolor_pikes(self, dices):
         possible_moves, selected_set = self._check_selected(dices)
         for i in range(24):

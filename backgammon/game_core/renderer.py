@@ -9,7 +9,7 @@ class Renderer:
         pygame.display.set_caption(TITLE)
         self._screen = pygame.display.set_mode(SCREEN_SIZE)
         self._field_image = pygame.image.load(FIELD_PATH)
-        self._font = pygame.font.SysFont("Impact", 40)
+        self._font = pygame.font.SysFont('Impact', 40)
         self._dice_sprites = self._get_dice_sprites()
         self._game_bg = get_image(GAME_BG_PATH, SCREEN_SIZE)
         self._dices_box_rect = get_dices_box_rect()
@@ -32,6 +32,12 @@ class Renderer:
     def draw_buttons(self, *buttons):
         for button in buttons:
             button.draw(self._screen)
+
+    def draw_records(self, records):
+        extra_indent = 0
+        for bot_name in records.keys():
+            self._draw_text(f'{bot_name:<{13}} : {str(records[bot_name])}', (55, 660 + extra_indent))
+            extra_indent += 50
 
     def _draw_dices(self, dices, current_color):
         rect = self._dices_box_rect

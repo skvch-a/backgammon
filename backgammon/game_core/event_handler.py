@@ -6,7 +6,6 @@ from ..bots.stupid_bot import StupidBot
 from ..buttons.button import Button
 from ..constants import WHITE, BLACK, CHECKERS_COUNT
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class EventHandler:
     def __init__(self, game):
@@ -68,7 +67,6 @@ class EventHandler:
         while self._game.field.has_legal_move(self._game.dices, self._game.current_color) or len(self._game.dices) != 0:
             events = pygame.event.get()
             self.check_for_quit(events)
-            self._game.update_current_dice()
             self.select_pike(events)
             self._game.make_player_move()
             self._game.render()
