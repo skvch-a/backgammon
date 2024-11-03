@@ -1,4 +1,5 @@
 import abc
+
 from backgammon.game_objects.field import Field
 from backgammon.utils.move import Move
 

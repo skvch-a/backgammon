@@ -1,10 +1,9 @@
 import random
-
 import pygame
 
+from ..constants import MUSIC_PATH, THROW_DICES_BUTTON_PATH
 from ..bots.bot import Bot
 from ..buttons.button import Button
-from ..constants import MUSIC_PATH, THROW_DICES_BUTTON_PATH
 from ..game_core.event_handler import EventHandler
 from ..game_core.menu import Menu
 from ..game_core.renderer import Renderer
