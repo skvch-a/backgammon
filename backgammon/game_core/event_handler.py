@@ -44,28 +44,24 @@ class EventHandler:
 
     def handle_game_events(self):
         if self._game.current_color == WHITE:
-            logging.info('White move.')
+            logging.info(f'White move.')
         else:
             logging.info('Black move.')
+        logging.info(F'Dices: {self._game.dices}.')
 
         if self.is_endgame_for_white() and self._game.current_color == WHITE:
             self._is_white_endgame = True
             self.pop_checkers(WHITE)
-            self._game.switch_turn()
-            return
-
-        if self.is_endgame_for_black() and self._game.current_color == BLACK:
+        elif self.is_endgame_for_black() and self._game.current_color == BLACK:
             self._is_black_endgame = True
             self.pop_checkers(BLACK)
-            self._game.switch_turn()
-            return
-
-        if self._game.is_bot_move():
+        elif self._game.is_bot_move():
             moves = self._game.bot.get_moves(self._game.field, self._game.dices)
             logging.info(f"Bot move: {moves}")
             self._game.field.make_moves(moves)
         else:
             self.handle_player_move()
+
         self._game.switch_turn()
 
     def handle_player_move(self) -> None:

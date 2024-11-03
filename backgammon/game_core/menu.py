@@ -3,9 +3,6 @@ import pygame
 from ..constants import HOTSEAT_BUTTON_PATH, STUPID_BOT_BUTTON_PATH, SMART_BOT_BUTTON_PATH
 from ..buttons.menu_button import MenuButton
 
-from ..bots.smart_bot import SmartBot
-from ..bots.stupid_bot import StupidBot
-
 
 class Menu:
     def __init__(self, event_handler, renderer):
@@ -23,4 +20,4 @@ class Menu:
         self._renderer.draw_menu_background()
         self._renderer.draw_buttons(*self._menu_buttons)
         pygame.display.update()
-        return self._event_handler.choose_game_mode()
+        return self._event_handler.choose_game_mode(self._menu_buttons)
