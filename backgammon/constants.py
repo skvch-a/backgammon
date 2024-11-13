@@ -13,8 +13,8 @@ PIKE_SELECTED_COLOR = (134, 5, 5)
 PIKE_POSSIBLE_MOVE_COLOR = (0, 245, 115)
 
 HOTSEAT_BUTTON_PATH = "backgammon/assets/images/hotseat.png"
-STUPID_BOT_BUTTON_PATH = "backgammon/assets/images/stupid_bot.png"
-SMART_BOT_BUTTON_PATH = "backgammon/assets/images/smart_bot.png"
+STUPID_BOT_BUTTON_PATH = "backgammon/assets/images/simple_bot.png"
+SMART_BOT_BUTTON_PATH = "backgammon/assets/images/random_bot.png"
 PLAY_BUTTON_PATH = "backgammon/assets/images/play_button.png"
 MUSIC_PATH = "backgammon/assets/music/alien_music.mp3"
 FIELD_PATH = "backgammon/assets/images/field.png"
