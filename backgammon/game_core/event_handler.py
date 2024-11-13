@@ -2,7 +2,7 @@ import pygame
 import logging
 
 from ..constants import WHITE, BLACK, CHECKERS_COUNT
-from ..bots import Bot, SmartBot, StupidBot
+from ..bots import Bot, RandomBot, SimpleBot
 from ..buttons import Button
 
 
@@ -37,10 +37,10 @@ class EventHandler:
                 return
             elif pressed_button_index == 1:
                 logging.info("STUPID_BOT mode selected.")
-                return StupidBot()
+                return SimpleBot()
             elif pressed_button_index == 2:
                 logging.info("SMART_BOT mode selected.")
-                return SmartBot()
+                return RandomBot()
 
     def check_for_buttons_pressed(self, buttons : list[Button]) -> int | None:
         """Проверяет нажаты ли кнопки, и возвращает индекс нажатой"""

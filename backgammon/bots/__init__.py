@@ -1,3 +1,3 @@
 from .bot import Bot
-from .smart_bot import SmartBot
-from .stupid_bot import StupidBot
+from .random_bot import RandomBot
+from .simple_bot import SimpleBot

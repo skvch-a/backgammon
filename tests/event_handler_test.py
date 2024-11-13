@@ -4,7 +4,7 @@ import pygame
 from unittest.mock import MagicMock, patch
 from backgammon.constants import *
 from backgammon.game_core import EventHandler
-from backgammon.bots import StupidBot, SmartBot
+from backgammon.bots import SimpleBot, RandomBot
 
 
 @pytest.fixture
@@ -36,10 +36,10 @@ def test_event_handler_choose_game_mode(event_handler):
         assert event_handler.choose_game_mode(buttons) is None
 
         mock_check_for_buttons_pressed.return_value = 1
-        assert isinstance(event_handler.choose_game_mode(buttons), StupidBot)
+        assert isinstance(event_handler.choose_game_mode(buttons), SimpleBot)
 
         mock_check_for_buttons_pressed.return_value = 2
-        assert isinstance(event_handler.choose_game_mode(buttons), SmartBot)
+        assert isinstance(event_handler.choose_game_mode(buttons), RandomBot)
 
 def test_event_handler_check_for_buttons_pressed(event_handler):
     buttons = [MagicMock(), MagicMock(), MagicMock()]
