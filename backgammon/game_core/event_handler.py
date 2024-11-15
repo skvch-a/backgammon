@@ -4,11 +4,13 @@ import logging
 from ..constants import WHITE, BLACK, CHECKERS_COUNT
 from ..bots import Bot, RandomBot, SimpleBot
 from ..buttons import Button
+from ..utils.game_saver import GameSaver
 
 
 class EventHandler:
     def __init__(self, game):
         self._game = game
+        self._game_saver = GameSaver(game)
         self._is_white_endgame = False
         self._is_black_endgame = False
         self._white_off_board_count = 0
@@ -41,12 +43,21 @@ class EventHandler:
             elif pressed_button_index == 2:
                 logging.info("SMART_BOT mode selected.")
                 return RandomBot()
+            elif pressed_button_index == 3:
+                exit_code = self._game_saver.load()
+                if exit_code == 0:
+                    logging.info("Load game from saving.")
+                    return self._game.bot
+
 
     def check_for_buttons_pressed(self, buttons : list[Button]) -> int | None:
         """Проверяет нажаты ли кнопки, и возвращает индекс нажатой"""
         events = pygame.event.get()
-        self.check_for_quit(events)
         for event in events:
+            if event.type == pygame.QUIT:
+                logging.info("Game quit by player.")
+                pygame.quit()
+                exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for button_index in range(len(buttons)):
                     if buttons[button_index].is_pressed(event.pos):
@@ -77,7 +88,7 @@ class EventHandler:
     def handle_player_move(self) -> None:
         while self._game.field.has_legal_move(self._game.dices, self._game.current_color) and len(self._game.dices) != 0:
             events = pygame.event.get()
-            self.check_for_quit(events)
+            self.check_all_for_quit(events)
             self.select_pike(events)
             self._game.make_player_move()
             self._game.render()
@@ -133,25 +144,24 @@ class EventHandler:
 
         return checkers_count == CHECKERS_COUNT
 
-    @staticmethod
-    def check_for_quit(events: list[pygame.event.Event]) -> None:
-        for event in events:
-            if event.type == pygame.QUIT:
-                logging.info("Game quit by player.")
-                pygame.quit()
-                exit()
+    def check_for_quit(self, event: pygame.event.Event) -> None:
+        if event.type == pygame.QUIT:
+            self._game_saver.save()
+            logging.info("Game quit by player.")
+            pygame.quit()
+            exit()
 
-    @staticmethod
-    def wait_until_button_pressed(button) -> None:
+    def check_all_for_quit(self, events: list[pygame.event.Event]) -> None:
+        for event in events:
+            self.check_for_quit(event)
+
+    def wait_until_button_pressed(self, button) -> None:
         """Ожидает нажатия заданной кнопки"""
         is_pressed = False
         while not is_pressed:
             events = pygame.event.get()
             for event in events:
-                if event.type == pygame.QUIT:
-                    logging.info("Game quit by player.")
-                    pygame.quit()
-                    exit()
+                self.check_for_quit(event)
                 if event.type == pygame.MOUSEBUTTONDOWN and button.is_pressed(event.pos):
                     is_pressed = True
                     break

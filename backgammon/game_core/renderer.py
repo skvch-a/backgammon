@@ -13,7 +13,6 @@ class Renderer:
         self._dice_sprites = self._get_dice_sprites()
         self._game_bg = get_image(GAME_BG_PATH, SCREEN_SIZE)
         self._dices_box_rect = get_dices_box_rect()
-        self._throw_dices_button_image = pygame.image.load(THROW_DICES_BUTTON_PATH)
         self._white_checker_image = pygame.image.load(CHECKER_WHITE_PATH)
         self._black_checker_image = pygame.image.load(CHECKER_BLACK_PATH)
         self.menu_bg = get_image(MENU_BG_PATH, SCREEN_SIZE)

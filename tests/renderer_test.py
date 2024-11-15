@@ -15,7 +15,6 @@ def test_renderer_init(renderer):
     assert renderer._dice_sprites is not None
     assert renderer._game_bg is not None
     assert renderer._dices_box_rect is not None
-    assert renderer._throw_dices_button_image is not None
     assert renderer._white_checker_image is not None
     assert renderer._black_checker_image is not None
     assert renderer.menu_bg is not None

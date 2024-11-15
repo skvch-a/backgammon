@@ -89,7 +89,7 @@ def test_event_handler_check_for_quit(event_handler):
     with patch('pygame.quit') as mock_quit, \
          patch('builtins.exit') as mock_exit:
 
-        event_handler.check_for_quit(events)
+        event_handler.check_all_for_quit(events)
 
         mock_quit.assert_called_once()
         mock_exit.assert_called_once()
@@ -102,5 +102,4 @@ def test_event_handler_wait_until_button_pressed(event_handler):
         mock_event_get.return_value = [MagicMock(type=pygame.MOUSEBUTTONDOWN, pos=(0, 0))]
 
         event_handler.wait_until_button_pressed(button)
-
         button.is_pressed.assert_called_once_with((0, 0))

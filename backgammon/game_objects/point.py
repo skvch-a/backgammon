@@ -21,6 +21,10 @@ class Point:
     def count(self):
         return len(self._checkers)
 
+    @property
+    def checkers(self):
+        return self._checkers
+
     def push(self, color):
         if self._checkers and self._checkers[0] != color:
             raise ValueError('Cannot push checker with different color')

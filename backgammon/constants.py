@@ -23,6 +23,7 @@ CHECKER_WHITE_PATH = "backgammon/assets/images/checker_white.png"
 MENU_BG_PATH = "backgammon/assets/images/menu.png"
 GAME_BG_PATH = "backgammon/assets/images/game_bg.png"
 THROW_DICES_BUTTON_PATH = "backgammon/assets/images/throw_dices.png"
+CONTINUE_BUTTON_PATH = "backgammon/assets/images/continue_button.png"
 
 FIELD_POS = (84, 220)
 

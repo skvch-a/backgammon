@@ -2,7 +2,6 @@ import random
 import pygame
 
 from ..constants import MUSIC_PATH, THROW_DICES_BUTTON_PATH, CHECKERS_COUNT
-from ..bots import Bot
 from ..buttons import Button
 from ..game_core import EventHandler, Menu, Renderer
 from ..game_objects import Field
@@ -12,6 +11,7 @@ from ..utils import Move, Leaderboard, get_dices_box_rect
 class Game:
     def __init__(self):
         pygame.init()
+
         self._leaderboard = Leaderboard()
         self._renderer = Renderer()
         self._field = Field()
@@ -43,10 +43,12 @@ class Game:
     def run(self):
         pygame.mixer.music.load(MUSIC_PATH)
         pygame.mixer.music.play(-1)
-
-        self._bot: Bot = self._menu.choose_game_mode()
+        self._menu.run()
+        self._bot = self._menu.bot
         self.render()
-        self.throw_dices()
+
+        if not self.dices:
+            self.throw_dices()
 
         while self._event_handler.get_winner() is None:
             self._event_handler.handle_game_events()
@@ -56,7 +58,7 @@ class Game:
         if self.bot is not None:
             self._leaderboard.update(self._bot.name, CHECKERS_COUNT - self._field.checkers_count)
         while True:
-            self._event_handler.check_for_quit(pygame.event.get())
+            self._event_handler.check_all_for_quit(pygame.event.get())
 
     def render(self, winner=None) -> None:
         """ Отрисовывает игру, включая интерфейс """
@@ -78,7 +80,7 @@ class Game:
         if not self.is_bot_move():
             self._renderer.draw_buttons(self._throw_dices_button)
             pygame.display.update()
-            EventHandler.wait_until_button_pressed(self._throw_dices_button)
+            self._event_handler.wait_until_button_pressed(self._throw_dices_button)
         self._dices = [random.randint(1, 6), random.randint(1, 6)]
 
     def make_player_move(self):

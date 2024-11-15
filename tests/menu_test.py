@@ -1,7 +1,7 @@
 import pytest
 
 from unittest.mock import MagicMock, patch
-from backgammon.buttons import MenuButton
+from backgammon.buttons import GameModeButton
 from backgammon.game_core import Menu
 
 @pytest.fixture
@@ -20,10 +20,10 @@ def test_menu_choose_game_mode(menu):
 
         mock_choose_game_mode.return_value = None
 
-        menu.choose_game_mode()
+        menu.run()
 
         mock_draw_menu_background.assert_called_once()
-        mock_draw_buttons.assert_called_once_with(*menu._menu_buttons)
+        mock_draw_buttons.assert_called_once_with(*menu._buttons)
         mock_draw_records.assert_called_once_with(menu._records)
         mock_update.assert_called_once()
-        mock_choose_game_mode.assert_called_once_with(menu._menu_buttons)
+        mock_choose_game_mode.assert_called_once_with(menu._buttons)
