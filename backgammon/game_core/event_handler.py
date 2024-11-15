@@ -147,7 +147,7 @@ class EventHandler:
     def check_for_quit(self, event: pygame.event.Event) -> None:
         if event.type == pygame.QUIT:
             self._game_saver.save()
-            logging.info("Game quit by player.")
+            logging.info("Game saved and closed.")
             pygame.quit()
             exit()
 
