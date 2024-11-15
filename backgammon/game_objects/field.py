@@ -7,23 +7,11 @@ from ..utils import Move
 
 class Field:
     def __init__(self):
-        self.points = [Point() for _ in range(24)]
-        for i in range(CHECKERS_COUNT):
-            self.points[0].push(WHITE)
-            self.points[12].push(BLACK)
-
+        self.points = self._get_start_points()
         self.last_point_index = {WHITE: 23, BLACK: 11}
         self.selected = -1
         self.selected_end = -1
-        self.positions = []
-        self.position_down = []
-        self._fill_positions()
-        self.pikes = []
-
-        for i, pos in enumerate(self.positions):
-            self.pikes.append(Pike(pos[0], pos[1], self._get_pike_type(i)))
-        for i, pos in enumerate(self.position_down):
-            self.pikes.append(Pike(pos[0], pos[1], self._get_pike_type(i), True))
+        self.pikes = self._get_pikes()
 
     @property
     def checkers_count(self) -> int:
@@ -31,6 +19,49 @@ class Field:
         for point in self.points:
             count += point.count
         return count
+
+    @property
+    def serialize_data(self):
+        checkers = []
+        for point in self.points:
+            checkers.append(point.checkers)
+        return checkers
+
+    @staticmethod
+    def _get_start_points():
+        points = [Point() for _ in range(24)]
+        for i in range(CHECKERS_COUNT):
+            points[0].push(WHITE)
+            points[12].push(BLACK)
+        return points
+
+    @staticmethod
+    def _get_pikes_positions():
+        first_position = (FIELD_POS[0] + 666, FIELD_POS[1] + 42)
+        positions = [first_position]
+        for i in range(1, 12):
+            if i == 6:
+                positions.append((positions[i - 1][0] - 104, first_position[1]))
+            else:
+                positions.append((positions[i - 1][0] - 50, first_position[1]))
+
+        first_position_down = (FIELD_POS[0] + 62, FIELD_POS[1] + 504)
+        positions_down = [first_position_down]
+        for i in range(1, 12):
+            if i == 6:
+                positions_down.append((positions_down[i - 1][0] + 104, first_position_down[1]))
+            else:
+                positions_down.append((positions_down[i - 1][0] + 50, first_position_down[1]))
+        return positions, positions_down
+
+    def _get_pikes(self):
+        pikes = []
+        positions, positions_down = self._get_pikes_positions()
+        for i, pos in enumerate(positions):
+            pikes.append(Pike(pos[0], pos[1], self._get_pike_type(i)))
+        for i, pos in enumerate(positions_down):
+            pikes.append(Pike(pos[0], pos[1], self._get_pike_type(i), True))
+        return pikes
 
     def recolor_pikes(self, dices) -> None:
         """Изменяет цвет пунктов в соответствии с их текущим состоянием"""
@@ -112,23 +143,6 @@ class Field:
                 if Move.is_correct(i, (i + sum(dices)) % 24, self.points[selected].peek()):
                     possible_moves.add((i + sum(dices)) % 24)
         return possible_moves, selected_set
-
-    def _fill_positions(self) -> None:
-        first_position = (FIELD_POS[0] + 666, FIELD_POS[1] + 42)
-        self.positions.append(first_position)
-        for i in range(1, 12):
-            if i == 6:
-                self.positions.append((self.positions[i - 1][0] - 104, first_position[1]))
-            else:
-                self.positions.append((self.positions[i - 1][0] - 50, first_position[1]))
-
-        first_position_down = (FIELD_POS[0] + 62, FIELD_POS[1] + 504)
-        self.position_down.append(first_position_down)
-        for i in range(1, 12):
-            if i == 6:
-                self.position_down.append((self.position_down[i - 1][0] + 104, first_position_down[1]))
-            else:
-                self.position_down.append((self.position_down[i - 1][0] + 50, first_position_down[1]))
 
     @staticmethod
     def _get_pike_type(pike_index) -> int:
