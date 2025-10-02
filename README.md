@@ -24,5 +24,6 @@
 
 
 ### Скриншоты 🥶
-![](https://github.com/skvch-a/SpaceInvaders/blob/main/screenshots/menu.png)
-![](https://github.com/skvch-a/SpaceInvaders/blob/main/screenshots/game.png)
+![](https://github.com/skvch-a/backgammon/blob/main/screenshots/menu.png)
+
+![](https://github.com/skvch-a/backgammon/blob/main/screenshots/game.png)
